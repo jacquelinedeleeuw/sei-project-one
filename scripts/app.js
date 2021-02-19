@@ -5,7 +5,7 @@ function init() {
   const title = document.querySelector('h1')
   const reset = document.querySelector('.reset')
 
-  const width = 9
+  const width = 10
   const mines = 10
   const cellCount = width * width
   const cells = []
@@ -24,10 +24,12 @@ function init() {
         return
       } else if (event.target.classList.contains('mine')) {
         gameOver()
-      } else if (event.target.classList.contains('blank')) {
-        blankCell()
+      } else if (event.target.classList.contains('safe') && event.target.value === 0) {
+        event.target.classList.add('uncovered')
+        // blankCell()
       } else {
         event.target.classList.add('uncovered')
+        event.target.innerHTML = event.target.value
       }
     }
 
@@ -52,6 +54,7 @@ function init() {
     })
   }
 
+
   // * Grid
   // create shuffled array
   function createGrid() {
@@ -63,6 +66,8 @@ function init() {
     for (let i = 0; i < cellCount - mines; i++) {
       const safe = document.createElement('div')
       safeCells.push(safe)
+      safeCells[i].classList.add('safe')
+      safeCells[i].value = 0
     }
     randomMines = randomMines.concat(safeCells)
     shuffleCells(randomMines)
@@ -74,7 +79,7 @@ function init() {
     }
 
     // add blank & number classes to non-mine cells
-    
+    numberCell()
   }
   
   // * Creating random Mines
@@ -88,19 +93,62 @@ function init() {
   }
 
   // * Number Logic based on mines
-    
+  function numberCell() {
+    for (let i = 0; i < cellCount; i++) {
+      const left = i - 1
+      const right = i + 1
+      const top = i - width
+      const bottom = i + width
+      const leftTop = i - 1 - width
+      const rightTop = i + 1 - width
+      const leftBottom = i - 1 + width
+      const rightBottom = i + 1 + width
+      if (cells[i].classList.contains('mine')) {
+        cells[i].value = 0
+      } else {
+        if (i % width !== width - 1 && cells[right].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && cells[left].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i >= width && cells[top].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i < cellCount - width && cells[bottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && i >= width && cells[leftTop].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== width - 1 && i >= width && cells[rightTop].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && i < cellCount - width && cells[leftBottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== width - 1 && i < cellCount - width && cells[rightBottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+      }
+    }
+  }
+
 
 
   // * If blank cell, reveal surrounding blank cells
-  function blankCell() {
+  // function blankCell() {
 
-  }
+  // }
   
   // * Game Over
   function gameOver() {
     cells.forEach(cell => {
       cell.classList.remove('flagged')
       cell.classList.add('uncovered')
+      if (cell.value > 0) {
+        cell.innerHTML = cell.value
+      }
       cells.forEach(mine => {
         if (mine.classList.contains('mine')) {
           mine.classList.add('mine-clicked')

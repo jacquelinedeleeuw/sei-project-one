@@ -14,16 +14,16 @@ button {
 }
 
 .grid {
-  height: 540px;
-  width: 540px;
+  height: 550px;
+  width: 550px;
   background-color: lightgray;
   display: flex;
   flex-wrap: wrap;
 }
 
 .grid div {
-  width: 58px;
-  height: 58px;
+  width: 53px;
+  height: 53px;
   border: 1px solid black;
 }
 
