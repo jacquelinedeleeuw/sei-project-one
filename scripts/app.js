@@ -5,7 +5,7 @@ function init() {
   const width = 9
   const mines = 10
   const cellCount = width * width
-  let cells = []
+  const cells = []
 
   // * Grid
   function createGrid() {
@@ -13,15 +13,25 @@ function init() {
       const cell = document.createElement('div')
       grid.appendChild(cell)
       cells.push(cell)
-      cell.classList.add('covered')
+      cell.classList.add('covered') 
     }
+    for (let j = 0; j < mines; j++) {
+      cells[j].classList.add('mine')
+    } 
+    shuffleCells(cells)
   }
-  createGrid()
   console.log('cells', cells)
+  createGrid()
 
   // * Creating random Mines
-
-
+  function shuffleCells(cells) {
+    for (let i = cells.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      const temp = cells[i]
+      cells[i] = cells[j]
+      cells[j] = temp
+    }
+  }
   // * Number Logic based on mines
 
 
@@ -48,6 +58,7 @@ function init() {
     }
   }
 
+
   // * Event Listeners
   cells.forEach(cell => {
     cell.addEventListener('click', clickCell)
@@ -56,6 +67,7 @@ function init() {
   cells.forEach(cell => {
     cell.addEventListener('contextmenu', flagCell)
   })
+
 
 }
 
