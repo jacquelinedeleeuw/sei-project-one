@@ -14,16 +14,16 @@ body {
 }
 
 .grid {
-  height: 450px;
-  width: 450px;
+  height: 540px;
+  width: 540px;
   background-color: lightgray;
   display: flex;
   flex-wrap: wrap;
 }
 
 .grid div {
-  width: 48px;
-  height: 48px;
+  width: 58px;
+  height: 58px;
   border: 1px solid black;
 }
 
@@ -32,11 +32,16 @@ body {
 }
 
 .flagged {
-  background-color: lightpink;
+  background-color: black;
+  background-image: url('../assets/flag.webp');
+  background-size: contain;
+  background-position: center;
 }
 
-.mine {
-  background-color: none;
+.mine-clicked {
+  background-image: url("../assets/mine.webp");
+  background-size: contain;
+  background-position: center;
 }
 
 .hidden {

@@ -17,15 +17,16 @@ function init() {
 
     // * Player clicks a cell
     function clickCell(event) {
-      event.target.classList.add('uncovered')
       if (event.target.classList.contains('mine')) {
         gameOver()
+      } else {
+        event.target.classList.add('uncovered')
       }
     }
 
     // * Player flags a cell
     function flagCell(event) {
-      event.target.classList.add('flagged')
+      event.target.classList.toggle('flagged')
       event = event || window.event
       if (event.stopPropagation) {
         event.stopPropagation()
@@ -34,7 +35,7 @@ function init() {
         event.preventDefault()
       }
     }
-
+    
     // * Number Logic based on mines
 
 
@@ -76,8 +77,13 @@ function init() {
     cells.forEach(cell => {
       cell.classList.remove('flagged')
       cell.classList.add('uncovered')
+      cells.forEach(mine => {
+        if (mine.classList.contains('mine')) {
+          mine.classList.add('mine-clicked')
+        }
+      })
+      title.innerHTML = 'Game Over'
     })
-    title.innerHTML = 'Game Over'
   }
 
   // * Event Listeners
