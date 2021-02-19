@@ -39,6 +39,13 @@ function init() {
   // * Player flags a cell
   function flagCell(event) {
     event.target.classList.add('flagged')
+    event = event || window.event
+    if (event.stopPropagation) {
+      event.stopPropagation()
+    }
+    if (event.preventDefault) {
+      event.preventDefault()
+    }
   }
 
   // * Event Listeners
