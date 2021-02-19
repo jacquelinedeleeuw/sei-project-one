@@ -32,13 +32,23 @@ function init() {
 
 
   // * Player clicks a cell
-
+  function clickCell(event) {
+    event.target.classList.add('uncovered')
+  }
 
   // * Player flags a cell
-
+  function flagCell(event) {
+    event.target.classList.add('flagged')
+  }
 
   // * Event Listeners
+  cells.forEach(cell => {
+    cell.addEventListener('click', clickCell)
+  })
 
+  cells.forEach(cell => {
+    cell.addEventListener('contextmenu', flagCell)
+  })
 
 }
 
