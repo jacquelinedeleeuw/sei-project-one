@@ -8,6 +8,8 @@ function init() {
   const mines = 10
   const cellCount = width * width
   const cells = []
+  let randomMines = []
+  const safeCells = []
 
   // * Game Start
   function startGame() {
@@ -17,7 +19,9 @@ function init() {
 
     // * Player clicks a cell
     function clickCell(event) {
-      if (event.target.classList.contains('mine')) {
+      if (event.target.classList.contains('flagged')) {
+        return
+      } else if (event.target.classList.contains('mine')) {
         gameOver()
       } else {
         event.target.classList.add('uncovered')
@@ -49,17 +53,25 @@ function init() {
   }
 
   // * Grid
+  // create shuffled array
   function createGrid() {
-    for (let i = 0; i < cellCount; i++) {
-      const cell = document.createElement('div')
-      grid.appendChild(cell)
-      cells.push(cell)
-      cell.classList.add('covered') 
+    for (let i = 0; i < mines; i++) {
+      const mine = document.createElement('div')
+      randomMines.push(mine)
+      randomMines[i].classList.add('mine') 
     }
-    for (let j = 0; j < mines; j++) {
-      cells[j].classList.add('mine')
-    } 
-    shuffleCells(cells)
+    for (let i = 0; i < cellCount - mines; i++) {
+      const safe = document.createElement('div')
+      safeCells.push(safe)
+    }
+    randomMines = randomMines.concat(safeCells)
+    shuffleCells(randomMines)
+
+    // add shuffled array to grid
+    for (let i = 0; i < cellCount; i++) {
+      grid.appendChild(randomMines[i])
+      cells.push(randomMines[i])
+    }
   }
   
   // * Creating random Mines
