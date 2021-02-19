@@ -2,6 +2,7 @@ function init() {
 
   const grid = document.querySelector('.grid')
   const start = document.querySelector('.start')
+  const title = document.querySelector('h1')
 
   const width = 9
   const mines = 10
@@ -17,6 +18,9 @@ function init() {
     // * Player clicks a cell
     function clickCell(event) {
       event.target.classList.add('uncovered')
+      if (event.target.classList.contains('mine')) {
+        gameOver()
+      }
     }
 
     // * Player flags a cell
@@ -68,7 +72,13 @@ function init() {
   }
   
   // * Game Over
-
+  function gameOver() {
+    cells.forEach(cell => {
+      cell.classList.remove('flagged')
+      cell.classList.add('uncovered')
+    })
+    title.innerHTML = 'Game Over'
+  }
 
   // * Event Listeners
   start.addEventListener('click', startGame)
