@@ -3,6 +3,7 @@ function init() {
   const grid = document.querySelector('.grid')
   const start = document.querySelector('.start')
   const title = document.querySelector('h1')
+  const reset = document.querySelector('.reset')
 
   const width = 9
   const mines = 10
@@ -23,6 +24,8 @@ function init() {
         return
       } else if (event.target.classList.contains('mine')) {
         gameOver()
+      } else if (event.target.classList.contains('blank')) {
+        blankCell()
       } else {
         event.target.classList.add('uncovered')
       }
@@ -40,9 +43,6 @@ function init() {
       }
     }
     
-    // * Number Logic based on mines
-
-
     // * Game Event Listeners
     cells.forEach(cell => {
       cell.addEventListener('click', clickCell)
@@ -72,16 +72,28 @@ function init() {
       grid.appendChild(randomMines[i])
       cells.push(randomMines[i])
     }
+
+    // add blank & number classes to non-mine cells
+    
   }
   
   // * Creating random Mines
   function shuffleCells(cells) {
-    for (let i = cells.length - 1; i > 0; i--) {
+    for (let i = 0; i < cells.length; i++) {
       const j = Math.floor(Math.random() * (i + 1))
       const temp = cells[i]
       cells[i] = cells[j]
       cells[j] = temp
     }
+  }
+
+  // * Number Logic based on mines
+    
+
+
+  // * If blank cell, reveal surrounding blank cells
+  function blankCell() {
+
   }
   
   // * Game Over
@@ -95,14 +107,19 @@ function init() {
         }
       })
       title.innerHTML = 'Game Over'
+      reset.classList.remove('hidden')
     })
+  }
+
+  // * Reset Game
+  function resetGame() {
+    window.location.reload()
   }
 
   // * Event Listeners
   start.addEventListener('click', startGame)
 
-  
-
+  reset.addEventListener('click', resetGame)
 
 }
 
