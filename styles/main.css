@@ -8,6 +8,11 @@ body {
   font-family: 'Courier New', Courier, monospace;
 }
 
+.start {
+  margin: 20px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .grid {
   height: 450px;
   width: 450px;
@@ -32,4 +37,8 @@ body {
 
 .mine {
   background-color: red;
+}
+
+.hidden {
+  display: none;
 }
