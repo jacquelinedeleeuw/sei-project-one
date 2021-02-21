@@ -147,14 +147,35 @@ function init() {
         cells[testBlankCell - 1].innerHTML = cells[testBlankCell - 1].value
       } else {
         // needs to loop here
-        console.log('blank')
       }
     }
     // check to the right
-
+    if (testBlankCell % width !== width - 1 && cells[testBlankCell + 1].classList.contains('safe')) {
+      cells[testBlankCell + 1].classList.add('uncovered')
+      if (cells[testBlankCell + 1].value > 0) {
+        cells[testBlankCell + 1].innerHTML = cells[testBlankCell + 1].value
+      } else {
+        // needs to loop here
+      }
+    }
     // check top
-
+    if (testBlankCell >= width && cells[testBlankCell - width].classList.contains('safe')) {
+      cells[testBlankCell - width].classList.add('uncovered')
+      if (cells[testBlankCell - width].value > 0) {
+        cells[testBlankCell - width].innerHTML = cells[testBlankCell - width].value
+      } else {
+        // needs to loop here
+      }
+    }
     // check bottom
+    if (testBlankCell < cellCount - width && cells[testBlankCell + width].classList.contains('safe')) {
+      cells[testBlankCell + width].classList.add('uncovered')
+      if (cells[testBlankCell + width].value > 0) {
+        cells[testBlankCell + width].innerHTML = cells[testBlankCell + width].value
+      } else {
+        // needs to loop here
+      }
+    }
   }
   
   // * Game Over
