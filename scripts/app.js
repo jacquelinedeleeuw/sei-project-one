@@ -11,6 +11,7 @@ function init() {
   const cells = []
   let randomMines = []
   const safeCells = []
+  let testBlankCell
 
   // * Game Start
   function startGame() {
@@ -26,7 +27,8 @@ function init() {
         gameOver()
       } else if (event.target.classList.contains('safe') && event.target.value === 0) {
         event.target.classList.add('uncovered')
-        // blankCell()
+        testBlankCell = cells.indexOf(event.target)
+        blankCell()
       } else {
         event.target.classList.add('uncovered')
         event.target.innerHTML = event.target.value
@@ -137,9 +139,23 @@ function init() {
 
 
   // * If blank cell, reveal surrounding blank cells
-  // function blankCell() {
+  function blankCell() {
+    // check to the left
+    if (testBlankCell % width !== 0 && cells[testBlankCell - 1].classList.contains('safe')) {
+      cells[testBlankCell - 1].classList.add('uncovered')
+      if (cells[testBlankCell - 1].value > 0) {
+        cells[testBlankCell - 1].innerHTML = cells[testBlankCell - 1].value
+      } else {
+        // needs to loop here
+        console.log('blank')
+      }
+    }
+    // check to the right
 
-  // }
+    // check top
+
+    // check bottom
+  }
   
   // * Game Over
   function gameOver() {
@@ -162,6 +178,7 @@ function init() {
   // * Reset Game
   function resetGame() {
     window.location.reload()
+    // change to play new game
   }
 
   // * Event Listeners
