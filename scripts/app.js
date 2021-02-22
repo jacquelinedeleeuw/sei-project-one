@@ -1,12 +1,12 @@
 function init() {
 
   const grid = document.querySelector('.grid')
-  const start = document.querySelector('.start')
   const title = document.querySelector('h1')
   const reset = document.querySelector('.reset')
   const flag = document.querySelector('.flag')
+  const timer = document.querySelector('.timer')
 
-  const width = 10
+  const width = 9
   const mines = 10
   const cellCount = width * width
   const cells = []
@@ -15,62 +15,60 @@ function init() {
   let testBlankCell
 
   // * Game Start
-  function startGame() {
-    start.classList.add('hidden')
-    grid.classList.remove('hidden')
-    flag.classList.remove('hidden')
-    createGrid()
+  // ? Choice of different board sizes/difficulty levels
+  // ? 1st click never a mine
 
-    // * Player clicks a cell
-    function clickCell(event) {
-      if (event.target.classList.contains('uncovered')) {
-        return
-      } else if (flag.classList.contains('flagging')) {
-        event.target.classList.toggle('flagged')
-        return
-      } else if (event.target.classList.contains('flagged')) {
-        return
-      } else if (event.target.classList.contains('mine')) {
-        gameOver()
-      } else if (event.target.classList.contains('safe') && event.target.value === 0) {
-        event.target.classList.add('uncovered')
-        testBlankCell = cells.indexOf(event.target)
-        blankCell()
-      } else {
-        event.target.classList.add('uncovered')
-        event.target.innerHTML = event.target.value
-      }
-    }
+  createGrid()
 
-    // * Player flags a cell
-    function flagCell(event) {
-      event = event || window.event
-      if (event.stopPropagation) {
-        event.stopPropagation()
-      }
-      if (event.preventDefault) {
-        event.preventDefault()
-      }
-      if (event.target.classList.contains('uncovered')) {
-        return
-      } else {
-        event.target.classList.toggle('flagged')
-      }
+  // * Player clicks a cell
+  function clickCell(event) {
+    if (event.target.classList.contains('uncovered')) {
+      return
+    } else if (flag.classList.contains('flagging')) {
+      event.target.classList.toggle('flagged')
+      return
+    } else if (event.target.classList.contains('flagged')) {
+      return
+    } else if (event.target.classList.contains('mine')) {
+      gameOver()
+    } else if (event.target.classList.contains('safe') && event.target.value === 0) {
+      event.target.classList.add('uncovered')
+      testBlankCell = cells.indexOf(event.target)
+      blankCell()
+    } else {
+      event.target.classList.add('uncovered')
+      event.target.innerHTML = event.target.value
     }
-
-    function flagCells() {
-      flag.classList.toggle('flagging')
-    }
-    
-    // * Game Event Listeners
-    cells.forEach(cell => {
-      cell.addEventListener('click', clickCell)
-    })
-    cells.forEach(cell => {
-      cell.addEventListener('contextmenu', flagCell)
-    })
-    flag.addEventListener('click', flagCells)
   }
+
+  // * Player flags a cell
+  function flagCell(event) {
+    event = event || window.event
+    if (event.stopPropagation) {
+      event.stopPropagation()
+    }
+    if (event.preventDefault) {
+      event.preventDefault()
+    }
+    if (event.target.classList.contains('uncovered')) {
+      return
+    } else {
+      event.target.classList.toggle('flagged')
+    }
+  }
+
+  function flagCells() {
+    flag.classList.toggle('flagging')
+  }
+    
+  // * Game Event Listeners
+  cells.forEach(cell => {
+    cell.addEventListener('click', clickCell)
+  })
+  cells.forEach(cell => {
+    cell.addEventListener('contextmenu', flagCell)
+  })
+  flag.addEventListener('click', flagCells)
 
 
   // * Grid
@@ -206,7 +204,11 @@ function init() {
       console.log(testBlankCells)
     }    
   }
-    
+
+  // ? Timer
+  // start when first cell is clicked
+  // stop when game over
+      
   // * Game Over
   function gameOver() {
     cells.forEach(cell => {
@@ -224,17 +226,19 @@ function init() {
     title.innerHTML = 'Game Over'
     reset.classList.remove('hidden')
     flag.classList.add('hidden')
+    title.classList.add('animate__heartBeat')
   }
 
   // * Reset Game
   function resetGame() {
     window.location.reload()
-    // change to play new game
   }
 
-  // * Event Listeners
-  start.addEventListener('click', startGame)
+  // ? ScoreBoard
 
+  // ? Sound effects
+
+  // * Event Listeners
   reset.addEventListener('click', resetGame)
 
 }

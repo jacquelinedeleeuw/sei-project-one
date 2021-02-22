@@ -1,18 +1,15 @@
 body {
   height: 100vh;
   width: 100vw;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-family: 'Courier New', Courier, monospace;
-  background-color: black;
-}
-
-h1 {
-  font-family: 'Oxanium', cursive;
-  color: #ffd8d8;
-  font-size: 80px;
+  background-image: url('../assets/Brick-wall.jpg');
+  background-position: center;
+  background-size: contain;
   text-shadow: 
   .1vw 0vw .25vw #ffd8d8, .2vw 0vw .25vw #ffd8d8, .4vw 0vw .25vw #ffd8d8, 
   .1vw 0vw   0vw #f89ddd, .2vw 0vw   0vw #f89ddd, .4vw 0vw   0vw #f89ddd,
@@ -23,41 +20,42 @@ h1 {
   .1vw 0vw  10vw #c5008a, .2vw 0vw  30vw #c5008a, .4vw 0vw  10vw #c5008a; 
 }
 
+h1 {
+  font-family: 'Oxanium', cursive;
+  color: #ffd8d8;
+  font-size: 80px;
+}
+
 button {
   margin: 20px;
   font-family: 'Oxanium', cursive;
 }
 
 .grid {
-  height: 550px;
-  width: 550px;
+  height: 540px;
+  width: 540px;
   background-color: white;
   display: flex;
   flex-wrap: wrap;
-  border: 5px solid rgb(255, 69, 180);
+  border: 10px solid rgb(223 99 204);
   border-radius: 10px;
 }
 
 .grid div {
-  width: 53px;
-  height: 53px;
-  background-color: #ffd8d8;
-  border: 1px solid rgb(255, 69, 180)
+  width: 60px;
+  height: 60px;
+  background-image: url("../assets/square-pink-neon-sign-vector-2577337.jpg");
+  background-size: cover;
+  background-position: center;
+  /* border: 1px solid white */
 }
 
 div.safe.uncovered {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
+  background-image: none;
   border: none;
   background-color: black;
-  text-shadow: 
-    .1vw 0vw .25vw #ffd8d8, .2vw 0vw .25vw #ffd8d8, .4vw 0vw .25vw #ffd8d8, 
-    .1vw 0vw   0vw #f89ddd, .2vw 0vw   0vw #f89ddd, .4vw 0vw   0vw #f89ddd,
-    .1vw 0vw  .1vw #fd79d6, .2vw 0vw  .1vw #fd79d6, .4vw 0vw  .1vw #fd79d6,
-    .1vw 0vw   2vw #fc54c9, .2vw 0vw   2vw #fc54c9, .4vw 0vw   2vw #fc54c9, 
-    .1vw 0vw   1vw #ff31c1, .2vw 0vw   1vw #ff31c1, .4vw 0vw   5vw #ff31c1, 
-    .1vw 0vw   5vw #ff00b3, .2vw 0vw  20vw #ff00b3, .4vw 0vw  10vw #ff00b3,
-    .1vw 0vw  10vw #c5008a, .2vw 0vw  30vw #c5008a, .4vw 0vw  10vw #c5008a; 
   text-align: center;
   font-size: 25px;
   display: flex;
@@ -66,8 +64,8 @@ div.safe.uncovered {
 }
 
 div .flagged {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
   background-color: black;
   background-image: url('../assets/flag.webp');
   background-size: contain;
@@ -77,12 +75,11 @@ div .flagged {
 
 .flagging {
   background-color: darkgray;
-  
 }
 
 div .mine-clicked {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
   border: none;
   background-image: url("../assets/mine.webp");
   background-size: cover;
