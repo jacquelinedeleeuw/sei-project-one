@@ -38,6 +38,11 @@ button {
   background-position: center;
 }
 
+.flagging {
+  background-color: darkgray;
+  
+}
+
 .mine-clicked {
   background-image: url("../assets/mine.webp");
   background-size: contain;
