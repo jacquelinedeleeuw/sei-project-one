@@ -14,6 +14,7 @@ function init() {
   const safeCells = []
   let testBlankCell
 
+
   // * Game Start
   // ? Choice of different board sizes/difficulty levels
   // ? 1st click never a mine
@@ -154,50 +155,93 @@ function init() {
   // * If blank cell, reveal surrounding blank cells
   function blankCell() {
     const testBlankCells = [testBlankCell]
+    const alreadyChecked = []
     while (testBlankCells.length > 0) {
-      console.log('test blank cells top', testBlankCells)
   
       // check to the left
-      if (testBlankCell % width !== 0 && cells[testBlankCell - 1].classList.contains('safe')) {
+      if (testBlankCell % width !== 0 && cells[testBlankCell - 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1)) {
         cells[testBlankCell - 1].classList.add('uncovered')
         if (cells[testBlankCell - 1].value > 0) {
           cells[testBlankCell - 1].innerHTML = cells[testBlankCell - 1].value
         } else {
           testBlankCells.push(testBlankCell - 1)
         }
+        alreadyChecked.push(testBlankCell - 1)
       }
-  
-      // // ? setTimeout?
-      // // check to the right
-      console.log('test right', testBlankCell)
-      // if (testBlankCell % width !== width - 1 && cells[testBlankCell + 1].classList.contains('safe')) {
-      //   cells[testBlankCell + 1].classList.add('uncovered')
-      //   if (cells[testBlankCell + 1].value > 0) {
-      //     cells[testBlankCell + 1].innerHTML = cells[testBlankCell + 1].value
-      //   } else {
-      //     testBlankCells.push(testBlankCell + 1)
-      //   }
-      // }
-  
-      // // check top
-      // if (testBlankCell >= width && cells[testBlankCell - width].classList.contains('safe')) {
-      //   cells[testBlankCell - width].classList.add('uncovered')
-      //   if (cells[testBlankCell - width].value > 0) {
-      //     cells[testBlankCell - width].innerHTML = cells[testBlankCell - width].value
-      //   } else {
-      //     testBlankCells.push(testBlankCell - width)
-      //   }
-      // }
-  
-      // // check bottom
-      // if (testBlankCell < cellCount - width && cells[testBlankCell + width].classList.contains('safe')) {
-      //   cells[testBlankCell + width].classList.add('uncovered')
-      //   if (cells[testBlankCell + width].value > 0) {
-      //     cells[testBlankCell + width].innerHTML = cells[testBlankCell + width].value
-      //   } else {
-      //     testBlankCells.push(testBlankCell + width)
-      //   }
-      // }
+
+      // check top left
+      if (testBlankCell % width !== 0 && testBlankCell >= width && cells[testBlankCell - 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 - width)) {
+        cells[testBlankCell - 1 - width].classList.add('uncovered')
+        if (cells[testBlankCell - 1 - width].value > 0) {
+          cells[testBlankCell - 1 - width].innerHTML = cells[testBlankCell - 1 - width].value
+        } else {
+          testBlankCells.push(testBlankCell - 1 - width)
+        }
+      }
+
+      // check top
+      if (testBlankCell >= width && cells[testBlankCell - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - width)) {
+        cells[testBlankCell - width].classList.add('uncovered')
+        if (cells[testBlankCell - width].value > 0) {
+          cells[testBlankCell - width].innerHTML = cells[testBlankCell - width].value
+        } else {
+          testBlankCells.push(testBlankCell - width)
+        }
+        alreadyChecked.push(testBlankCell - width)
+      }
+
+      // check top right
+      if (testBlankCell % width !== width - 1 && testBlankCell >= width && cells[testBlankCell + 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 - width)) {
+        cells[testBlankCell + 1 - width].classList.add('uncovered')
+        if (cells[testBlankCell + 1 - width].value > 0) {
+          cells[testBlankCell + 1 - width].innerHTML = cells[testBlankCell + 1 - width].value
+        } else {
+          testBlankCells.push(testBlankCell + 1 - width)
+        }
+      }
+      
+      // check to the right
+      if (testBlankCell % width !== width - 1 && cells[testBlankCell + 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1)) {
+        cells[testBlankCell + 1].classList.add('uncovered')
+        if (cells[testBlankCell + 1].value > 0) {
+          cells[testBlankCell + 1].innerHTML = cells[testBlankCell + 1].value
+        } else {
+          testBlankCells.push(testBlankCell + 1)
+        }
+        alreadyChecked.push(testBlankCell + 1)
+      }
+
+      // check bottom right
+      if (testBlankCell % width !== width - 1 && testBlankCell < cellCount - width && cells[testBlankCell + 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 + width)) {
+        cells[testBlankCell + 1 + width].classList.add('uncovered')
+        if (cells[testBlankCell + 1 + width].value > 0) {
+          cells[testBlankCell + 1 + width].innerHTML = cells[testBlankCell + 1 + width].value
+        } else {
+          testBlankCells.push(testBlankCell + 1 + width)
+        }
+      }
+
+      // check bottom
+      if (testBlankCell < cellCount - width && cells[testBlankCell + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + width)) {
+        cells[testBlankCell + width].classList.add('uncovered')
+        if (cells[testBlankCell + width].value > 0) {
+          cells[testBlankCell + width].innerHTML = cells[testBlankCell + width].value
+        } else {
+          testBlankCells.push(testBlankCell + width)
+        }
+        alreadyChecked.push(testBlankCell + width)
+      }
+
+      // check bottom left
+      if (testBlankCell % width !== 0 && testBlankCell < cellCount - width && cells[testBlankCell - 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 + width)) {
+        cells[testBlankCell - 1 + width].classList.add('uncovered')
+        if (cells[testBlankCell - 1 + width].value > 0) {
+          cells[testBlankCell - 1 + width].innerHTML = cells[testBlankCell - 1 + width].value
+        } else {
+          testBlankCells.push(testBlankCell - 1 + width)
+        }
+      }
+
       testBlankCells.shift()
       testBlankCell = testBlankCells[0]
       console.log(testBlankCell)
@@ -205,8 +249,8 @@ function init() {
     }    
   }
 
-  // ? Timer
-  // start when first cell is clicked
+  // * Timer
+
   // stop when game over
       
   // * Game Over
