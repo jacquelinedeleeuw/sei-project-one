@@ -13,7 +13,9 @@ function init() {
   let randomMines = []
   const safeCells = []
   let testBlankCell
-
+  let gameTimer
+  let counter = 1
+  let uncoveredCells
 
   // * Game Start
   // ? Choice of different board sizes/difficulty levels
@@ -36,9 +38,27 @@ function init() {
       event.target.classList.add('uncovered')
       testBlankCell = cells.indexOf(event.target)
       blankCell()
+      uncoveredCells = 0
+      cells.forEach(cell => {
+        if (cell.classList.contains('safe') && cell.classList.contains('uncovered')) {
+          uncoveredCells++
+          if (uncoveredCells === cellCount - mines) {
+            gameWon()
+          }
+        }
+      })
     } else {
       event.target.classList.add('uncovered')
       event.target.innerHTML = event.target.value
+      uncoveredCells = 0
+      cells.forEach(cell => {
+        if (cell.classList.contains('safe') && cell.classList.contains('uncovered')) {
+          uncoveredCells++
+          if (uncoveredCells === cellCount - mines) {
+            gameWon()
+          }
+        }
+      })
     }
   }
 
@@ -244,14 +264,32 @@ function init() {
 
       testBlankCells.shift()
       testBlankCell = testBlankCells[0]
-      console.log(testBlankCell)
-      console.log(testBlankCells)
     }    
   }
 
   // * Timer
+  function startTimer() {
+    timer.innerHTML = counter
+    gameTimer = setInterval(() => {
+      counter++
+      timer.innerHTML = counter
+      grid.removeEventListener('click', startTimer)
+    }, 1000)
+  }
 
-  // stop when game over
+  // * Game Won
+  function gameWon() {
+    cells.forEach(mine => {
+      if (mine.classList.contains('mine')) {
+        mine.classList.add('mine-clicked')
+      }
+    })
+    title.innerHTML = 'You won!'
+    reset.classList.remove('hidden')
+    flag.classList.add('hidden')
+    title.classList.add('animate__heartBeat')
+    clearInterval(gameTimer)
+  }
       
   // * Game Over
   function gameOver() {
@@ -267,10 +305,12 @@ function init() {
         }
       })
     })
+
     title.innerHTML = 'Game Over'
     reset.classList.remove('hidden')
     flag.classList.add('hidden')
     title.classList.add('animate__heartBeat')
+    clearInterval(gameTimer)
   }
 
   // * Reset Game
@@ -285,6 +325,7 @@ function init() {
   // * Event Listeners
   reset.addEventListener('click', resetGame)
 
+  grid.addEventListener('click', startTimer)
 }
 
 window.addEventListener('DOMContentLoaded', init)
