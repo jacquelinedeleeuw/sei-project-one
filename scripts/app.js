@@ -5,15 +5,18 @@ function init() {
   const reset = document.querySelector('.reset')
   const flag = document.querySelector('.flag')
   const timer = document.querySelector('.timer')
+  const levels = document.querySelector('.levels')
+  const easyGame = document.querySelector('.easy')
 
-  const width = 9
-  const mines = 10
-  const cellCount = width * width
+  let width = 9
+  let height = 9
+  let mines = 10
+  const cellCount = width * height
   const cells = []
   let randomMines = []
   const safeCells = []
   let testBlankCell
-  let gameTimer
+  let gameTimer = 0
   let counter = 1
   let uncoveredCells
 
@@ -21,8 +24,13 @@ function init() {
   // ? Choice of different board sizes/difficulty levels
   // ? 1st click never a mine
 
-  createGrid()
+  function startEasyGame() {
+    levels.classList.add('hidden')
+    flag.classList.remove('hidden')
+  }
 
+  createGrid()
+  
   // * Player clicks a cell
   function clickCell(event) {
     if (event.target.classList.contains('uncovered')) {
@@ -92,20 +100,31 @@ function init() {
   flag.addEventListener('click', flagCells)
 
 
+  // * Timer
+  function startTimer() {
+    levels.classList.add('hidden')
+    timer.innerHTML = counter
+    gameTimer = setInterval(() => {
+      counter++
+      timer.innerHTML = counter
+      grid.removeEventListener('click', startTimer)
+    }, 1000)
+  }
+
   // * Grid
   // create shuffled array
   function createGrid() {
-    for (let i = 0; i < mines; i++) {
-      const mine = document.createElement('div')
-      randomMines.push(mine)
-      randomMines[i].classList.add('mine')
-      // randomMines[i].classList.add('mine-clicked')
-    }
     for (let i = 0; i < cellCount - mines; i++) {
       const safe = document.createElement('div')
       safeCells.push(safe)
       safeCells[i].classList.add('safe')
       safeCells[i].value = 0
+    }
+    for (let i = 0; i < mines; i++) {
+      const mine = document.createElement('div')
+      randomMines.push(mine)
+      randomMines[i].classList.add('mine')
+      // randomMines[i].classList.add('mine-clicked')
     }
     randomMines = randomMines.concat(safeCells)
     shuffleCells(randomMines)
@@ -267,16 +286,6 @@ function init() {
     }    
   }
 
-  // * Timer
-  function startTimer() {
-    timer.innerHTML = counter
-    gameTimer = setInterval(() => {
-      counter++
-      timer.innerHTML = counter
-      grid.removeEventListener('click', startTimer)
-    }, 1000)
-  }
-
   // * Game Won
   function gameWon() {
     cells.forEach(mine => {
@@ -310,6 +319,7 @@ function init() {
     reset.classList.remove('hidden')
     flag.classList.add('hidden')
     title.classList.add('animate__heartBeat')
+    title.classList.add('game-over')
     clearInterval(gameTimer)
   }
 
@@ -326,6 +336,8 @@ function init() {
   reset.addEventListener('click', resetGame)
 
   grid.addEventListener('click', startTimer)
+
+  easyGame.addEventListener('click', startEasyGame)
 }
 
 window.addEventListener('DOMContentLoaded', init)
