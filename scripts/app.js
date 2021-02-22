@@ -220,9 +220,10 @@ function init() {
           mine.classList.add('mine-clicked')
         }
       })
-      title.innerHTML = 'Game Over'
-      reset.classList.remove('hidden')
     })
+    title.innerHTML = 'Game Over'
+    reset.classList.remove('hidden')
+    flag.classList.add('hidden')
   }
 
   // * Reset Game
