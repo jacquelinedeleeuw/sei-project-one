@@ -1,36 +1,276 @@
 function init() {
 
+  const gameLevels = document.querySelectorAll('.level')
   const grid = document.querySelector('.grid')
   const title = document.querySelector('h1')
   const reset = document.querySelector('.reset')
   const flag = document.querySelector('.flag')
   const timer = document.querySelector('.timer')
-  const levels = document.querySelector('.levels')
-  const easyGame = document.querySelector('.easy')
 
+  const gameLevel = document.querySelector('.levels')
+  const audio = document.querySelector('audio')
+  console.log()
   let width = 9
   let height = 9
   let mines = 10
   const cellCount = width * height
-  const cells = []
+  let cells = []
   let randomMines = []
-  const safeCells = []
+  let safeCells = []
   let testBlankCell
   let gameTimer = 0
   let counter = 1
   let uncoveredCells
-
+  
   // * Game Start
   // ? Choice of different board sizes/difficulty levels
   // ? 1st click never a mine
 
-  function startEasyGame() {
-    levels.classList.add('hidden')
-    flag.classList.remove('hidden')
+  createGrid(9, 9, 10)
+  function startGame(event) {
+    gameLevel.classList.add('hidden')
+    if (event.target.classList.contains('easy')) {
+      grid.classList.add('easyGame')
+      startTimer()
+      // for (let i = 0; i < (width * height); i++) {
+      //   grid.removeChild(randomMines[i])
+      //   cells = []
+      //   randomMines = []
+      //   safeCells = []
+      // }
+      // width = 9
+      // height = 9
+      // mines = 10
+      // createGrid(9, 9, 10)
+    } else if (event.target.classList.contains('medium')) {
+      grid.classList.add('mediumGame')
+      for (let i = 0; i < (width * height); i++) {
+        grid.removeChild(randomMines[i])
+      }
+      cells = []
+      randomMines = []
+      safeCells = []
+      // width = 16
+      // height = 16
+      // mines = 40
+      createGrid(16, 16, 40)
+      startTimer()
+      console.log(cells)
+    } else if (event.target.classList.contains('hard')) {
+      grid.classList.add('hardGame')
+      for (let i = 0; i < (width * height); i++) {
+        grid.removeChild(randomMines[i])
+      }
+      cells = []
+      randomMines = []
+      safeCells = []
+      // width = 16
+      // height = 30
+      // mines = 99
+      createGrid(30, 16, 99)
+      startTimer()
+    } 
+    console.log(width, height, mines)
+    console.log(grid.classList)
   }
 
-  createGrid()
+  // * Grid
+  // create shuffled array
+  function createGrid(width, height, mines) {
+    for (let i = 0; i < (width * height) - mines; i++) {
+      const safe = document.createElement('div')
+      safeCells.push(safe)
+      safeCells[i].classList.add('safe')
+      safeCells[i].value = 0
+      if (grid.classList.contains('mediumGame')) {
+        safeCells[i].classList.add('medium')
+      }
+      if (grid.classList.contains('hardGame')) {
+        safeCells[i].classList.add('hard')
+      }
+    }
+    for (let i = 0; i < mines; i++) {
+      const mine = document.createElement('div')
+      randomMines.push(mine)
+      randomMines[i].classList.add('mine')
+      randomMines[i].classList.add('mine-clicked')
+      if (grid.classList.contains('mediumGame')) {
+        randomMines[i].classList.add('medium')
+      }
+      if (grid.classList.contains('hardGame')) {
+        randomMines[i].classList.add('hard')
+      }
+    }
+    randomMines = randomMines.concat(safeCells)
+
+    // * Shuffling Mines
+    for (let i = 0; i < randomMines.length; i++) {
+      const j = Math.floor(Math.random() * (i + 1))
+      const temp = randomMines[i]
+      randomMines[i] = randomMines[j]
+      randomMines[j] = temp
+    }
+    
+    // add shuffled array to grid
+    for (let i = 0; i < (width * height); i++) {
+      grid.appendChild(randomMines[i])
+      cells.push(randomMines[i])
+    }
+    numberLogic()
+  }
+
+  // Number Logic based on mines
+  function numberLogic() {
+    for (let i = 0; i < cellCount; i++) {
+      const left = i - 1
+      const right = i + 1
+      const top = i - width
+      const bottom = i + width
+      const leftTop = i - 1 - width
+      const rightTop = i + 1 - width
+      const leftBottom = i - 1 + width
+      const rightBottom = i + 1 + width
+      if (cells[i].classList.contains('mine')) {
+        cells[i].value = 0
+      } else {
+        if (i % width !== width - 1 && cells[right].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && cells[left].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i >= width && cells[top].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i < cellCount - width && cells[bottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && i >= width && cells[leftTop].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== width - 1 && i >= width && cells[rightTop].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && i < cellCount - width && cells[leftBottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== width - 1 && i < cellCount - width && cells[rightBottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+      }
+    }
+  }
+
+  // * Blank cell logic
+  function blankCell() {
+    if (grid.classList.contains('easyGame')) {
+      width = 9
+      height = 9
+      mines = 10
+    } else if (grid.classList.contains('mediumGame')) {
+      width = 16
+      height = 16
+      mines = 40
+    }
+    if (grid.classList.contains('hardGame')) {
+      width = 16
+      height = 30
+      mines = 99
+    }
+    const testBlankCells = [testBlankCell]
+    const alreadyChecked = []
+    while (testBlankCells.length > 0) {
+      
+      // check to the left
+      if (testBlankCell % width !== 0 && cells[testBlankCell - 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1)) {
+        cells[testBlankCell - 1].classList.add('uncovered')
+        if (cells[testBlankCell - 1].value > 0) {
+          cells[testBlankCell - 1].innerHTML = cells[testBlankCell - 1].value
+        } else {
+          testBlankCells.push(testBlankCell - 1)
+        }
+        alreadyChecked.push(testBlankCell - 1)
+      }
+    
+      // check top left
+      if (testBlankCell % width !== 0 && testBlankCell >= width && cells[testBlankCell - 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 - width)) {
+        cells[testBlankCell - 1 - width].classList.add('uncovered')
+        if (cells[testBlankCell - 1 - width].value > 0) {
+          cells[testBlankCell - 1 - width].innerHTML = cells[testBlankCell - 1 - width].value
+        } else {
+          testBlankCells.push(testBlankCell - 1 - width)
+        }
+      }
+    
+      // check top
+      if (testBlankCell >= width && cells[testBlankCell - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - width)) {
+        cells[testBlankCell - width].classList.add('uncovered')
+        if (cells[testBlankCell - width].value > 0) {
+          cells[testBlankCell - width].innerHTML = cells[testBlankCell - width].value
+        } else {
+          testBlankCells.push(testBlankCell - width)
+        }
+        alreadyChecked.push(testBlankCell - width)
+      }
+    
+      // check top right
+      if (testBlankCell % width !== width - 1 && testBlankCell >= width && cells[testBlankCell + 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 - width)) {
+        cells[testBlankCell + 1 - width].classList.add('uncovered')
+        if (cells[testBlankCell + 1 - width].value > 0) {
+          cells[testBlankCell + 1 - width].innerHTML = cells[testBlankCell + 1 - width].value
+        } else {
+          testBlankCells.push(testBlankCell + 1 - width)
+        }
+      }
+          
+      // check to the right
+      if (testBlankCell % width !== width - 1 && cells[testBlankCell + 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1)) {
+        cells[testBlankCell + 1].classList.add('uncovered')
+        if (cells[testBlankCell + 1].value > 0) {
+          cells[testBlankCell + 1].innerHTML = cells[testBlankCell + 1].value
+        } else {
+          testBlankCells.push(testBlankCell + 1)
+        }
+        alreadyChecked.push(testBlankCell + 1)
+      }
+    
+      // check bottom right
+      if (testBlankCell % width !== width - 1 && testBlankCell < cellCount - width && cells[testBlankCell + 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 + width)) {
+        cells[testBlankCell + 1 + width].classList.add('uncovered')
+        if (cells[testBlankCell + 1 + width].value > 0) {
+          cells[testBlankCell + 1 + width].innerHTML = cells[testBlankCell + 1 + width].value
+        } else {
+          testBlankCells.push(testBlankCell + 1 + width)
+        }
+      }
+    
+      // check bottom
+      if (testBlankCell < cellCount - width && cells[testBlankCell + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + width)) {
+        cells[testBlankCell + width].classList.add('uncovered')
+        if (cells[testBlankCell + width].value > 0) {
+          cells[testBlankCell + width].innerHTML = cells[testBlankCell + width].value
+        } else {
+          testBlankCells.push(testBlankCell + width)
+        }
+        alreadyChecked.push(testBlankCell + width)
+      }
+    
+      // check bottom left
+      if (testBlankCell % width !== 0 && testBlankCell < cellCount - width && cells[testBlankCell - 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 + width)) {
+        cells[testBlankCell - 1 + width].classList.add('uncovered')
+        if (cells[testBlankCell - 1 + width].value > 0) {
+          cells[testBlankCell - 1 + width].innerHTML = cells[testBlankCell - 1 + width].value
+        } else {
+          testBlankCells.push(testBlankCell - 1 + width)
+        }
+      }
+    
+      testBlankCells.shift()
+      testBlankCell = testBlankCells[0]
+    }    
+  }
   
+  // ! Game Play
   // * Player clicks a cell
   function clickCell(event) {
     if (event.target.classList.contains('uncovered')) {
@@ -42,9 +282,12 @@ function init() {
       return
     } else if (event.target.classList.contains('mine')) {
       gameOver()
+      return
     } else if (event.target.classList.contains('safe') && event.target.value === 0) {
       event.target.classList.add('uncovered')
       testBlankCell = cells.indexOf(event.target)
+      audio.src = './assets/Woosh-Mark_DiAngelo-4778593.mp3'
+      audio.play()
       blankCell()
       uncoveredCells = 0
       cells.forEach(cell => {
@@ -90,200 +333,16 @@ function init() {
     flag.classList.toggle('flagging')
   }
     
-  // * Game Event Listeners
-  cells.forEach(cell => {
-    cell.addEventListener('click', clickCell)
-  })
-  cells.forEach(cell => {
-    cell.addEventListener('contextmenu', flagCell)
-  })
-  flag.addEventListener('click', flagCells)
-
-
   // * Timer
   function startTimer() {
-    levels.classList.add('hidden')
+    gameLevel.classList.add('hidden')
+    flag.classList.remove('hidden')
     timer.innerHTML = counter
     gameTimer = setInterval(() => {
       counter++
       timer.innerHTML = counter
       grid.removeEventListener('click', startTimer)
     }, 1000)
-  }
-
-  // * Grid
-  // create shuffled array
-  function createGrid() {
-    for (let i = 0; i < cellCount - mines; i++) {
-      const safe = document.createElement('div')
-      safeCells.push(safe)
-      safeCells[i].classList.add('safe')
-      safeCells[i].value = 0
-    }
-    for (let i = 0; i < mines; i++) {
-      const mine = document.createElement('div')
-      randomMines.push(mine)
-      randomMines[i].classList.add('mine')
-      // randomMines[i].classList.add('mine-clicked')
-    }
-    randomMines = randomMines.concat(safeCells)
-    shuffleCells(randomMines)
-
-    // add shuffled array to grid
-    for (let i = 0; i < cellCount; i++) {
-      grid.appendChild(randomMines[i])
-      cells.push(randomMines[i])
-    }
-
-    // add blank & number classes to non-mine cells
-    numberCell()
-  }
-  
-  // * Creating random Mines
-  function shuffleCells(cells) {
-    for (let i = 0; i < cells.length; i++) {
-      const j = Math.floor(Math.random() * (i + 1))
-      const temp = cells[i]
-      cells[i] = cells[j]
-      cells[j] = temp
-    }
-  }
-
-  // * Number Logic based on mines
-  function numberCell() {
-    for (let i = 0; i < cellCount; i++) {
-      const left = i - 1
-      const right = i + 1
-      const top = i - width
-      const bottom = i + width
-      const leftTop = i - 1 - width
-      const rightTop = i + 1 - width
-      const leftBottom = i - 1 + width
-      const rightBottom = i + 1 + width
-      if (cells[i].classList.contains('mine')) {
-        cells[i].value = 0
-      } else {
-        if (i % width !== width - 1 && cells[right].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== 0 && cells[left].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i >= width && cells[top].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i < cellCount - width && cells[bottom].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== 0 && i >= width && cells[leftTop].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== width - 1 && i >= width && cells[rightTop].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== 0 && i < cellCount - width && cells[leftBottom].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== width - 1 && i < cellCount - width && cells[rightBottom].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-      }
-    }
-  }
-
-  // * If blank cell, reveal surrounding blank cells
-  function blankCell() {
-    const testBlankCells = [testBlankCell]
-    const alreadyChecked = []
-    while (testBlankCells.length > 0) {
-  
-      // check to the left
-      if (testBlankCell % width !== 0 && cells[testBlankCell - 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1)) {
-        cells[testBlankCell - 1].classList.add('uncovered')
-        if (cells[testBlankCell - 1].value > 0) {
-          cells[testBlankCell - 1].innerHTML = cells[testBlankCell - 1].value
-        } else {
-          testBlankCells.push(testBlankCell - 1)
-        }
-        alreadyChecked.push(testBlankCell - 1)
-      }
-
-      // check top left
-      if (testBlankCell % width !== 0 && testBlankCell >= width && cells[testBlankCell - 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 - width)) {
-        cells[testBlankCell - 1 - width].classList.add('uncovered')
-        if (cells[testBlankCell - 1 - width].value > 0) {
-          cells[testBlankCell - 1 - width].innerHTML = cells[testBlankCell - 1 - width].value
-        } else {
-          testBlankCells.push(testBlankCell - 1 - width)
-        }
-      }
-
-      // check top
-      if (testBlankCell >= width && cells[testBlankCell - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - width)) {
-        cells[testBlankCell - width].classList.add('uncovered')
-        if (cells[testBlankCell - width].value > 0) {
-          cells[testBlankCell - width].innerHTML = cells[testBlankCell - width].value
-        } else {
-          testBlankCells.push(testBlankCell - width)
-        }
-        alreadyChecked.push(testBlankCell - width)
-      }
-
-      // check top right
-      if (testBlankCell % width !== width - 1 && testBlankCell >= width && cells[testBlankCell + 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 - width)) {
-        cells[testBlankCell + 1 - width].classList.add('uncovered')
-        if (cells[testBlankCell + 1 - width].value > 0) {
-          cells[testBlankCell + 1 - width].innerHTML = cells[testBlankCell + 1 - width].value
-        } else {
-          testBlankCells.push(testBlankCell + 1 - width)
-        }
-      }
-      
-      // check to the right
-      if (testBlankCell % width !== width - 1 && cells[testBlankCell + 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1)) {
-        cells[testBlankCell + 1].classList.add('uncovered')
-        if (cells[testBlankCell + 1].value > 0) {
-          cells[testBlankCell + 1].innerHTML = cells[testBlankCell + 1].value
-        } else {
-          testBlankCells.push(testBlankCell + 1)
-        }
-        alreadyChecked.push(testBlankCell + 1)
-      }
-
-      // check bottom right
-      if (testBlankCell % width !== width - 1 && testBlankCell < cellCount - width && cells[testBlankCell + 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 + width)) {
-        cells[testBlankCell + 1 + width].classList.add('uncovered')
-        if (cells[testBlankCell + 1 + width].value > 0) {
-          cells[testBlankCell + 1 + width].innerHTML = cells[testBlankCell + 1 + width].value
-        } else {
-          testBlankCells.push(testBlankCell + 1 + width)
-        }
-      }
-
-      // check bottom
-      if (testBlankCell < cellCount - width && cells[testBlankCell + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + width)) {
-        cells[testBlankCell + width].classList.add('uncovered')
-        if (cells[testBlankCell + width].value > 0) {
-          cells[testBlankCell + width].innerHTML = cells[testBlankCell + width].value
-        } else {
-          testBlankCells.push(testBlankCell + width)
-        }
-        alreadyChecked.push(testBlankCell + width)
-      }
-
-      // check bottom left
-      if (testBlankCell % width !== 0 && testBlankCell < cellCount - width && cells[testBlankCell - 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 + width)) {
-        cells[testBlankCell - 1 + width].classList.add('uncovered')
-        if (cells[testBlankCell - 1 + width].value > 0) {
-          cells[testBlankCell - 1 + width].innerHTML = cells[testBlankCell - 1 + width].value
-        } else {
-          testBlankCells.push(testBlankCell - 1 + width)
-        }
-      }
-
-      testBlankCells.shift()
-      testBlankCell = testBlankCells[0]
-    }    
   }
 
   // * Game Won
@@ -330,14 +389,23 @@ function init() {
 
   // ? ScoreBoard
 
-  // ? Sound effects
-
   // * Event Listeners
+  cells.forEach(cell => {
+    cell.addEventListener('click', clickCell)
+  })
+  cells.forEach(cell => {
+    cell.addEventListener('contextmenu', flagCell)
+  })
+  flag.addEventListener('click', flagCells)
+
   reset.addEventListener('click', resetGame)
 
   grid.addEventListener('click', startTimer)
+  
+  gameLevels.forEach(level => {
+    level.addEventListener('click', startGame)
+  })
 
-  easyGame.addEventListener('click', startEasyGame)
 }
 
 window.addEventListener('DOMContentLoaded', init)
