@@ -6,14 +6,13 @@ function init() {
   const reset = document.querySelector('.reset')
   const flag = document.querySelector('.flag')
   const timer = document.querySelector('.timer')
-
   const gameLevel = document.querySelector('.levels')
   const audio = document.querySelector('audio')
-  console.log()
+
   let width = 9
   let height = 9
   let mines = 10
-  const cellCount = width * height
+  let cellCount = width * height
   let cells = []
   let randomMines = []
   let safeCells = []
@@ -23,25 +22,14 @@ function init() {
   let uncoveredCells
   
   // * Game Start
-  // ? Choice of different board sizes/difficulty levels
   // ? 1st click never a mine
-
   createGrid(9, 9, 10)
+
   function startGame(event) {
     gameLevel.classList.add('hidden')
     if (event.target.classList.contains('easy')) {
       grid.classList.add('easyGame')
       startTimer()
-      // for (let i = 0; i < (width * height); i++) {
-      //   grid.removeChild(randomMines[i])
-      //   cells = []
-      //   randomMines = []
-      //   safeCells = []
-      // }
-      // width = 9
-      // height = 9
-      // mines = 10
-      // createGrid(9, 9, 10)
     } else if (event.target.classList.contains('medium')) {
       grid.classList.add('mediumGame')
       for (let i = 0; i < (width * height); i++) {
@@ -50,12 +38,14 @@ function init() {
       cells = []
       randomMines = []
       safeCells = []
-      // width = 16
-      // height = 16
-      // mines = 40
       createGrid(16, 16, 40)
+      cells.forEach(cell => {
+        cell.addEventListener('click', clickCell)
+      })
+      cells.forEach(cell => {
+        cell.addEventListener('contextmenu', flagCell)
+      })
       startTimer()
-      console.log(cells)
     } else if (event.target.classList.contains('hard')) {
       grid.classList.add('hardGame')
       for (let i = 0; i < (width * height); i++) {
@@ -64,14 +54,15 @@ function init() {
       cells = []
       randomMines = []
       safeCells = []
-      // width = 16
-      // height = 30
-      // mines = 99
       createGrid(30, 16, 99)
+      cells.forEach(cell => {
+        cell.addEventListener('click', clickCell)
+      })
+      cells.forEach(cell => {
+        cell.addEventListener('contextmenu', flagCell)
+      })
       startTimer()
-    } 
-    console.log(width, height, mines)
-    console.log(grid.classList)
+    }
   }
 
   // * Grid
@@ -116,11 +107,16 @@ function init() {
       grid.appendChild(randomMines[i])
       cells.push(randomMines[i])
     }
-    numberLogic()
-  }
-
-  // Number Logic based on mines
-  function numberLogic() {
+    // Number Logic based on mines
+    if (grid.classList.contains('mediumGame')) {
+      width = 16
+      height = 16
+      cellCount = width * height
+    } else if (grid.classList.contains('hardGame')) {
+      width = 16
+      height = 30
+      cellCount = width * height
+    }
     for (let i = 0; i < cellCount; i++) {
       const left = i - 1
       const right = i + 1
@@ -163,19 +159,8 @@ function init() {
 
   // * Blank cell logic
   function blankCell() {
-    if (grid.classList.contains('easyGame')) {
-      width = 9
-      height = 9
-      mines = 10
-    } else if (grid.classList.contains('mediumGame')) {
+    if (grid.classList.contains('mediumGame') || grid.classList.contains('hardGame')) {
       width = 16
-      height = 16
-      mines = 40
-    }
-    if (grid.classList.contains('hardGame')) {
-      width = 16
-      height = 30
-      mines = 99
     }
     const testBlankCells = [testBlankCell]
     const alreadyChecked = []
@@ -269,8 +254,7 @@ function init() {
       testBlankCell = testBlankCells[0]
     }    
   }
-  
-  // ! Game Play
+
   // * Player clicks a cell
   function clickCell(event) {
     if (event.target.classList.contains('uncovered')) {
@@ -405,7 +389,6 @@ function init() {
   gameLevels.forEach(level => {
     level.addEventListener('click', startGame)
   })
-
 }
 
 window.addEventListener('DOMContentLoaded', init)
