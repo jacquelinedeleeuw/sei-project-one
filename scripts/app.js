@@ -10,8 +10,8 @@ function init() {
   const audio = document.querySelector('audio')
 
   let width = 9
-  let height = 9
-  let mines = 10
+  const height = 9
+  const mines = 10
   let cellCount = width * height
   let cells = []
   let randomMines = []
@@ -23,6 +23,8 @@ function init() {
   
   // * Game Start
   // ? 1st click never a mine
+  // ? ScoreBoard
+
   createGrid(9, 9, 10)
 
   function startGame(event) {
@@ -84,7 +86,6 @@ function init() {
       const mine = document.createElement('div')
       randomMines.push(mine)
       randomMines[i].classList.add('mine')
-      randomMines[i].classList.add('mine-clicked')
       if (grid.classList.contains('mediumGame')) {
         randomMines[i].classList.add('medium')
       }
@@ -370,8 +371,6 @@ function init() {
   function resetGame() {
     window.location.reload()
   }
-
-  // ? ScoreBoard
 
   // * Event Listeners
   cells.forEach(cell => {
