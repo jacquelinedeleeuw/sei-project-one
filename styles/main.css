@@ -3,7 +3,7 @@ body {
   width: 100vw;
   margin: 0;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   flex-direction: column;
   color: darkgray;
@@ -28,7 +28,7 @@ body {
 h1 {
   font-family: 'La Belle Aurore', cursive;
   font-size: 80px;
-  margin: 0;
+  margin-top: 50px;
   margin-bottom: -35px;
 }
 
@@ -94,9 +94,12 @@ h1 {
 
 .grid div {
   font-family: 'Oxanium', cursive;
+  font-weight: bolder;
+  text-shadow: none;
+  color: #fc54c9;
   width: 32px;
   height: 32px;
-  font-size: 15px;
+  font-size: 20px;
   background-image: url("../assets/square-pink-neon-sign-vector-2577337.jpg");
   background-size: cover;
   background-position: center;

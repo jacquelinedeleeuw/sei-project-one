@@ -8,15 +8,17 @@ function init() {
   const timer = document.querySelector('.timer')
   const gameLevel = document.querySelector('.levels')
   const easy = document.querySelector('.easy')
+  const medium = document.querySelector('.medium')
+  const hard = document.querySelector('.hard')
   const audio = document.querySelector('audio')
 
   let width = 9
   const height = 9
   const mines = 10
   let cellCount = width * height
-  let cells = []
+  const cells = []
   let randomMines = []
-  let safeCells = []
+  const safeCells = []
   let testBlankCell
   let gameTimer = 0
   let counter = 0
@@ -25,10 +27,23 @@ function init() {
   // * Game Start
   // ? 1st click never a mine
   // ? ScoreBoard
-
-  
+  // const starting = setInterval(() => {
+  //   easy.classList.add('neon')
+  //   setTimeout(() => {
+  //     medium.classList.add('neon')
+  //   }, 200)
+  //   setTimeout(() => {
+  //     hard.classList.add('neon')
+  //   }, 400)
+  //   setTimeout(() => {
+  //     easy.classList.remove('neon')
+  //     medium.classList.remove('neon')
+  //     hard.classList.remove('neon')
+  //   }, 800)
+  // }, 1000)
 
   function startGame(event) {
+    clearInterval(starting)
     if (event.target.classList.contains('easy')) {
       createGrid(9, 9, 10)
       event.target.classList.add('neon')
@@ -36,18 +51,11 @@ function init() {
       grid.classList.remove('start')
       easy.classList.add('neon')
       startTimer()
-
     } else if (event.target.classList.contains('medium')) {
       easy.classList.remove('neon')
       event.target.classList.add('neon')
       grid.classList.add('mediumGame')
       grid.classList.remove('start')
-      // for (let i = 0; i < (width * height); i++) {
-      //   grid.removeChild(randomMines[i])
-      // }
-      // cells = []
-      // randomMines = []
-      // safeCells = []
       createGrid(16, 16, 40)
       grid.classList.remove('start')
       startTimer()
@@ -55,12 +63,6 @@ function init() {
       event.target.classList.add('neon')
       grid.classList.add('hardGame')
       grid.classList.remove('start')
-      // for (let i = 0; i < (width * height); i++) {
-      //   grid.removeChild(randomMines[i])
-      // }
-      // cells = []
-      // randomMines = []
-      // safeCells = []
       createGrid(30, 16, 99)
       startTimer()
     }
@@ -70,6 +72,14 @@ function init() {
     cells.forEach(cell => {
       cell.addEventListener('contextmenu', flagCell)
     })
+    setInterval(() => {
+      title.classList.remove('neon')
+      audio.src = 'assets/Fizzle-SoundBible.com-1439537520.mp3'
+      audio.play()
+      setTimeout(() => {
+        title.classList.add('neon')
+      }, 200)
+    }, Math.floor(Math.random() * (40000 - 20000) + 20000))
   }
 
   // * Grid
@@ -277,8 +287,8 @@ function init() {
     } else if (event.target.classList.contains('safe') && event.target.value === 0) {
       event.target.classList.add('uncovered')
       testBlankCell = cells.indexOf(event.target)
-      // audio.src = './assets/Woosh-Mark_DiAngelo-4778593.mp3'
-      // audio.play()
+      audio.src = './assets/Woosh-Mark_DiAngelo-4778593.mp3'
+      audio.play()
       blankCell()
       uncoveredCells = 0
       cells.forEach(cell => {
@@ -345,7 +355,6 @@ function init() {
         level.removeEventListener('click', startGame)
       })
     }, 1000)
-  
   }
 
   // * Game Won
@@ -358,12 +367,14 @@ function init() {
     title.innerHTML = 'You won!'
     reset.classList.remove('hidden')
     flag.classList.add('hidden')
+    reset.classList.add('neon')
     title.classList.add('animate__heartBeat')
     clearInterval(gameTimer)
   }
-      
   // * Game Over
   function gameOver() {
+    audio.src = 'assets/Smashing-Yuri_Santana-1233262689.mp3'
+    audio.play()
     cells.forEach(cell => {
       cell.classList.remove('flagged')
       cell.classList.add('uncovered')
