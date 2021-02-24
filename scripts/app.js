@@ -411,6 +411,7 @@ function init() {
 
   function flagCells() {
     flag.classList.toggle('neon')
+    flag.classList.toggle('flagging')
   }
   
   // * Timer

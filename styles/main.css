@@ -75,7 +75,6 @@ h1 {
   background-size: cover;
 }
 
-
 .grid.easyGame {
   margin-top: 10px;
 }
@@ -121,7 +120,6 @@ div .flagged {
   background-image: url('../assets/flag.webp');
   background-size: contain;
   background-position: center;
-  border: none;
 }
 
 div .mine-clicked {
