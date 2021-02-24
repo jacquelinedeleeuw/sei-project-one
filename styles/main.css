@@ -109,7 +109,6 @@ h1 {
 
 div.safe.uncovered {
   background-image: none;
-  border: none;
   background-color: black;
   text-align: center;
   display: flex;

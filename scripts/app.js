@@ -11,6 +11,7 @@ function init() {
   const medium = document.querySelector('.medium')
   const hard = document.querySelector('.hard')
   const audio = document.querySelector('audio')
+  const backgroundAudio = document.querySelector('.background')
 
   let width = 9
   let height = 9
@@ -49,25 +50,20 @@ function init() {
     // clearInterval(starting)
     if (event.target.classList.contains('easy')) {
       createGrid(9, 9, 10)
-      event.target.classList.add('neon')
       grid.classList.add('easyGame')
       grid.classList.remove('start')
-      easy.classList.add('neon')
       startTimer()
     } else if (event.target.classList.contains('medium')) {
-      easy.classList.remove('neon')
-      event.target.classList.add('neon')
       grid.classList.add('mediumGame')
       grid.classList.remove('start')
       createGrid(16, 16, 40)
       grid.classList.remove('start')
       startTimer()
     } else if (event.target.classList.contains('hard')) {
-      event.target.classList.add('neon')
       grid.classList.add('hardGame')
       grid.classList.remove('start')
-      createGrid(30, 16, 99)
       startTimer()
+      createGrid(30, 16, 99)
     }
     cells.forEach(cell => {
       cell.addEventListener('click', clickCell)
@@ -75,14 +71,21 @@ function init() {
     cells.forEach(cell => {
       cell.addEventListener('contextmenu', flagCell)
     })
-    setInterval(() => {
-      title.classList.remove('neon')
-      audio.src = 'assets/Fizzle-SoundBible.com-1439537520.mp3'
-      audio.play()
-      setTimeout(() => {
-        title.classList.add('neon')
-      }, 200)
-    }, Math.floor(Math.random() * (40000 - 20000) + 20000))
+    setTimeout(() => {
+      setInterval(() => {
+        title.classList.remove('neon')
+        audio.src = 'assets/Dying Light Bulb-SoundBible.com-742005847.mp3'
+        audio.play()
+        setTimeout(() => {
+          title.classList.add('neon')
+        }, 200)
+      }, Math.floor(Math.random() * (12000 - 5000) + 5000))
+    }, 5000)
+    // setTimeout(() => {
+    //   backgroundAudio.src = 'assets/Halogen Light-SoundBible.com-1664817471.mp3'
+    //   backgroundAudio.loop = true
+    //   backgroundAudio.play()
+    // }, 1400)
   }
 
   // * Grid
@@ -197,6 +200,46 @@ function init() {
       cellCount = width * height
     }
     const key = event.keyCode
+    if (key === 32) {
+      if (cells[keyCurrentPosition].classList.contains('uncovered')) {
+        return
+      } else if (flag.classList.contains('flagging')) {
+        cells[keyCurrentPosition].classList.toggle('flagged')
+        return
+      } else if (cells[keyCurrentPosition].classList.contains('flagged')) {
+        return
+      } else if (cells[keyCurrentPosition].classList.contains('mine')) {
+        gameOver()
+        return
+      } else if (cells[keyCurrentPosition].classList.contains('safe') && cells[keyCurrentPosition].value === 0) {
+        cells[keyCurrentPosition].classList.add('uncovered')
+        testBlankCell = keyCurrentPosition
+        audio.src = './assets/Woosh-Mark_DiAngelo-4778593.mp3'
+        audio.play()
+        blankCell()
+        uncoveredCells = 0
+        cells.forEach(cell => {
+          if (cell.classList.contains('safe') && cell.classList.contains('uncovered')) {
+            uncoveredCells++
+            if (uncoveredCells === cellCount - mines) {
+              gameWon()
+            }
+          }
+        })
+      } else {
+        cells[keyCurrentPosition].classList.add('uncovered')
+        cells[keyCurrentPosition].innerHTML = cells[keyCurrentPosition].value
+        uncoveredCells = 0
+        cells.forEach(cell => {
+          if (cell.classList.contains('safe') && cell.classList.contains('uncovered')) {
+            uncoveredCells++
+            if (uncoveredCells === cellCount - mines) {
+              gameWon()
+            }
+          }
+        })
+      }
+    }
     removeKey(keyCurrentPosition)
     if (key === 39 && keyCurrentPosition % width !== width - 1) {
       keyCurrentPosition++
@@ -206,7 +249,7 @@ function init() {
       keyCurrentPosition -= width
     } else if (key === 40 && keyCurrentPosition + width <= cellCount - 1) {
       keyCurrentPosition += width
-    }
+    } 
     addKey(keyCurrentPosition)
   }
 
@@ -373,15 +416,38 @@ function init() {
   // * Timer
   function startTimer() {
     title.classList.add('neon')
+    timer.classList.add('neon')
+    if (grid.classList.contains('easyGame')) {
+      easy.classList.add('neon')
+    } else if (grid.classList.contains('mediumGame')) {
+      medium.classList.add('neon')
+    } else if (grid.classList.contains('hardGame')) {
+      hard.classList.add('neon')
+    }
     setTimeout(() => {
       title.classList.remove('neon')
+      timer.classList.remove('neon') 
+      if (grid.classList.contains('easyGame')) {
+        easy.classList.remove('neon')
+      } else if (grid.classList.contains('mediumGame')) {
+        medium.classList.remove('neon')
+      } else if (grid.classList.contains('hardGame')) {
+        hard.classList.remove('neon')
+      }
       audio.src = 'assets/Fizzle-SoundBible.com-1439537520.mp3'
       audio.play()
     }, 500)
     setTimeout(() => {
       title.classList.add('neon')
+      timer.classList.add('neon')
+      if (grid.classList.contains('easyGame')) {
+        easy.classList.add('neon')
+      } else if (grid.classList.contains('mediumGame')) {
+        medium.classList.add('neon')
+      } else if (grid.classList.contains('hardGame')) {
+        hard.classList.add('neon')
+      }
     }, 800)
-    timer.classList.add('neon')  
     flag.classList.remove('hidden')
     timer.innerHTML = counter
     gameTimer = setInterval(() => {
