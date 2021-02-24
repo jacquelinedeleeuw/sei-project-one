@@ -26,35 +26,41 @@ function init() {
   // ? 1st click never a mine
   // ? ScoreBoard
 
-  createGrid(9, 9, 10)
+  
 
   function startGame(event) {
     if (event.target.classList.contains('easy')) {
+      createGrid(9, 9, 10)
       event.target.classList.add('neon')
       grid.classList.add('easyGame')
+      grid.classList.remove('start')
+      easy.classList.add('neon')
       startTimer()
+
     } else if (event.target.classList.contains('medium')) {
       easy.classList.remove('neon')
       event.target.classList.add('neon')
       grid.classList.add('mediumGame')
-      for (let i = 0; i < (width * height); i++) {
-        grid.removeChild(randomMines[i])
-      }
-      cells = []
-      randomMines = []
-      safeCells = []
+      grid.classList.remove('start')
+      // for (let i = 0; i < (width * height); i++) {
+      //   grid.removeChild(randomMines[i])
+      // }
+      // cells = []
+      // randomMines = []
+      // safeCells = []
       createGrid(16, 16, 40)
+      grid.classList.remove('start')
       startTimer()
     } else if (event.target.classList.contains('hard')) {
-      easy.classList.remove('neon')
       event.target.classList.add('neon')
       grid.classList.add('hardGame')
-      for (let i = 0; i < (width * height); i++) {
-        grid.removeChild(randomMines[i])
-      }
-      cells = []
-      randomMines = []
-      safeCells = []
+      grid.classList.remove('start')
+      // for (let i = 0; i < (width * height); i++) {
+      //   grid.removeChild(randomMines[i])
+      // }
+      // cells = []
+      // randomMines = []
+      // safeCells = []
       createGrid(30, 16, 99)
       startTimer()
     }
@@ -69,7 +75,6 @@ function init() {
   // * Grid
   // create shuffled array
   function createGrid(width, height, mines) {
-    
     for (let i = 0; i < (width * height) - mines; i++) {
       const safe = document.createElement('div')
       safeCells.push(safe)
@@ -86,7 +91,7 @@ function init() {
       const mine = document.createElement('div')
       randomMines.push(mine)
       randomMines[i].classList.add('mine')
-      randomMines[i].classList.add('mine-clicked')
+      // randomMines[i].classList.add('mine-clicked')
       if (grid.classList.contains('mediumGame')) {
         randomMines[i].classList.add('medium')
       }
@@ -336,7 +341,9 @@ function init() {
     gameTimer = setInterval(() => {
       counter++
       timer.innerHTML = counter
-      grid.removeEventListener('click', startTimer)
+      gameLevels.forEach(level => {
+        level.removeEventListener('click', startGame)
+      })
     }, 1000)
   
   }
@@ -394,8 +401,6 @@ function init() {
   flag.addEventListener('click', flagCells)
 
   reset.addEventListener('click', resetGame)
-
-  grid.addEventListener('click', startTimer)
   
   gameLevels.forEach(level => {
     level.addEventListener('click', startGame)
