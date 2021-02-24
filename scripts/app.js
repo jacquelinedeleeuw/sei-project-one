@@ -31,53 +31,93 @@ function init() {
   // * Game Start
   // ? 1st click never a mine
   // ? ScoreBoard
-  // const starting = setInterval(() => {
-  //   easy.classList.add('neon')
-  //   setTimeout(() => {
-  //     medium.classList.add('neon')
-  //   }, 200)
-  //   setTimeout(() => {
-  //     hard.classList.add('neon')
-  //   }, 400)
-  //   setTimeout(() => {
-  //     easy.classList.remove('neon')
-  //     medium.classList.remove('neon')
-  //     hard.classList.remove('neon')
-  //   }, 800)
-  // }, 1000)
+
+  function chooseLevel(event) {
+    if (event.target.classList.contains('easy')) {
+      grid.classList.remove('startMedium')
+      grid.classList.remove('startHard')
+      grid.classList.add('start')
+    } else if (event.target.classList.contains('medium')) {
+      grid.classList.remove('start')
+      grid.classList.remove('startHard')
+      grid.classList.add('startMedium')
+    } else if (event.target.classList.contains('hard')) {
+      grid.classList.remove('start')
+      grid.classList.remove('startMedium')
+      grid.classList.add('startHard')
+    }
+  }
 
   function startGame(event) {
-    // clearInterval(starting)
+    gameLevels.forEach(level => {
+      level.removeEventListener('mouseenter', chooseLevel)
+    })
     if (event.target.classList.contains('easy')) {
-      createGrid(9, 9, 10)
       grid.classList.add('easyGame')
-      grid.classList.remove('start')
       startTimer()
+      setTimeout(() => {
+        createGrid(9, 9, 10)
+      }, 500)
+      setTimeout(() => {
+        grid.classList.remove('start')
+      }, 1500)
     } else if (event.target.classList.contains('medium')) {
       grid.classList.add('mediumGame')
-      grid.classList.remove('start')
-      createGrid(16, 16, 40)
-      grid.classList.remove('start')
       startTimer()
+      setTimeout(() => {
+        createGrid(16, 16, 40)
+      }, 500)
+      setTimeout(() => {
+        grid.classList.remove('startMedium')
+      }, 1500)
     } else if (event.target.classList.contains('hard')) {
       grid.classList.add('hardGame')
-      grid.classList.remove('start')
       startTimer()
-      createGrid(30, 16, 99)
+      setTimeout(() => {
+        createGrid(30, 16, 99)
+      }, 500)
+      setTimeout(() => {
+        grid.classList.remove('startHard')
+      }, 1500)
     }
-    cells.forEach(cell => {
-      cell.addEventListener('click', clickCell)
-    })
-    cells.forEach(cell => {
-      cell.addEventListener('contextmenu', flagCell)
-    })
+    setTimeout(() => {
+      cells.forEach(cell => {
+        cell.addEventListener('click', clickCell)
+      })
+      cells.forEach(cell => {
+        cell.addEventListener('contextmenu', flagCell)
+      })
+    }, 1000)
+    
     setTimeout(() => {
       setInterval(() => {
         title.classList.remove('neon')
-        audio.src = 'assets/Dying Light Bulb-SoundBible.com-742005847.mp3'
+        timer.classList.remove('neon') 
+        if (grid.classList.contains('easyGame')) {
+          easy.classList.remove('neon')
+        } else if (grid.classList.contains('mediumGame')) {
+          medium.classList.remove('neon')
+        } else if (grid.classList.contains('hardGame')) {
+          hard.classList.remove('neon')
+        }
+        if (flag.classList.contains('flagging')) {
+          flag.classList.remove('neon')
+        }
+        audio.src = 'assets/random-fizzle.mp3'
         audio.play()
         setTimeout(() => {
           title.classList.add('neon')
+          timer.classList.add('neon')
+          if (grid.classList.contains('easyGame')) {
+            easy.classList.add('neon')
+          } else if (grid.classList.contains('mediumGame')) {
+            medium.classList.add('neon')
+          } else if (grid.classList.contains('hardGame')) {
+            hard.classList.add('neon')
+          }
+          if (flag.classList.contains('flagging')) {
+            flag.classList.add('neon')
+          }
         }, 200)
       }, Math.floor(Math.random() * (12000 - 5000) + 5000))
     }, 5000)
@@ -85,7 +125,7 @@ function init() {
     //   backgroundAudio.src = 'assets/Halogen Light-SoundBible.com-1664817471.mp3'
     //   backgroundAudio.loop = true
     //   backgroundAudio.play()
-    // }, 1400)
+    // }, 1200)
   }
 
   // * Grid
@@ -423,6 +463,8 @@ function init() {
   
   // * Timer
   function startTimer() {
+    audio.src = 'assets/start-fizzle.mp3'
+    audio.play()
     title.classList.add('neon')
     timer.classList.add('neon')
     if (grid.classList.contains('easyGame')) {
@@ -442,9 +484,7 @@ function init() {
       } else if (grid.classList.contains('hardGame')) {
         hard.classList.remove('neon')
       }
-      audio.src = 'assets/Fizzle-SoundBible.com-1439537520.mp3'
-      audio.play()
-    }, 500)
+    }, 300)
     setTimeout(() => {
       title.classList.add('neon')
       timer.classList.add('neon')
@@ -455,16 +495,19 @@ function init() {
       } else if (grid.classList.contains('hardGame')) {
         hard.classList.add('neon')
       }
-    }, 800)
+    }, 500)
     flag.classList.remove('hidden')
     timer.innerHTML = counter
-    gameTimer = setInterval(() => {
-      counter++
-      timer.innerHTML = counter
-      gameLevels.forEach(level => {
-        level.removeEventListener('click', startGame)
-      })
-    }, 1000)
+    setTimeout(() => {
+      gameTimer = setInterval(() => {
+        counter++
+        timer.innerHTML = counter
+        gameLevels.forEach(level => {
+          level.removeEventListener('click', startGame)
+        })
+      }, 1000)
+    }, 500)
+
   }
 
   // * Game Won
@@ -525,6 +568,9 @@ function init() {
   
   gameLevels.forEach(level => {
     level.addEventListener('click', startGame)
+  })
+  gameLevels.forEach(level => {
+    level.addEventListener('mouseenter', chooseLevel)
   })
   document.addEventListener('keydown', handleKey)
 }
