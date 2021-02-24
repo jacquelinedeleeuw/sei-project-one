@@ -97,8 +97,9 @@ h1 {
   font-weight: bolder;
   text-shadow: none;
   color: #fc54c9;
-  width: 32px;
-  height: 32px;
+  border: 1px solid black;
+  width: 30px;
+  height: 30px;
   font-size: 20px;
   background-image: url("../assets/square-pink-neon-sign-vector-2577337.jpg");
   background-size: cover;
@@ -128,6 +129,10 @@ div .mine-clicked {
   background-image: url("../assets/mine.webp");
   background-size: cover;
   background-position: center;
+}
+
+div.key {
+  border: 1px solid #a249a2;
 }
 
 .hidden {

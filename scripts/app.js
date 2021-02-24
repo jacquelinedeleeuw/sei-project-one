@@ -13,7 +13,7 @@ function init() {
   const audio = document.querySelector('audio')
 
   let width = 9
-  const height = 9
+  let height = 9
   const mines = 10
   let cellCount = width * height
   const cells = []
@@ -23,6 +23,9 @@ function init() {
   let gameTimer = 0
   let counter = 0
   let uncoveredCells
+  const keyClass = 'key'
+  const keyStartPosition = 0
+  let keyCurrentPosition = 0
   
   // * Game Start
   // ? 1st click never a mine
@@ -43,7 +46,7 @@ function init() {
   // }, 1000)
 
   function startGame(event) {
-    clearInterval(starting)
+    // clearInterval(starting)
     if (event.target.classList.contains('easy')) {
       createGrid(9, 9, 10)
       event.target.classList.add('neon')
@@ -172,6 +175,39 @@ function init() {
         }
       }
     }
+    addKey(keyStartPosition)
+  }
+
+  function addKey(position) {
+    cells[position].classList.add(keyClass)
+  }
+
+  function removeKey(position) {
+    cells[position].classList.remove(keyClass)
+  }
+
+  function handleKey(event) {
+    if (grid.classList.contains('mediumGame')) {
+      width = 16
+      height = 16
+      cellCount = width * height
+    } else if (grid.classList.contains('hardGame')) {
+      width = 16
+      height = 30
+      cellCount = width * height
+    }
+    const key = event.keyCode
+    removeKey(keyCurrentPosition)
+    if (key === 39 && keyCurrentPosition % width !== width - 1) {
+      keyCurrentPosition++
+    } else if (key === 37 && keyCurrentPosition % width !== 0) {
+      keyCurrentPosition--
+    } else if (key === 38 && keyCurrentPosition >= width) {
+      keyCurrentPosition -= width
+    } else if (key === 40 && keyCurrentPosition + width <= cellCount - 1) {
+      keyCurrentPosition += width
+    }
+    addKey(keyCurrentPosition)
   }
 
   // * Blank cell logic
@@ -416,6 +452,7 @@ function init() {
   gameLevels.forEach(level => {
     level.addEventListener('click', startGame)
   })
+  document.addEventListener('keydown', handleKey)
 }
 
 window.addEventListener('DOMContentLoaded', init)
