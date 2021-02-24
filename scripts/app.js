@@ -7,6 +7,7 @@ function init() {
   const flag = document.querySelector('.flag')
   const timer = document.querySelector('.timer')
   const gameLevel = document.querySelector('.levels')
+  const easy = document.querySelector('.easy')
   const audio = document.querySelector('audio')
 
   let width = 9
@@ -18,7 +19,7 @@ function init() {
   let safeCells = []
   let testBlankCell
   let gameTimer = 0
-  let counter = 1
+  let counter = 0
   let uncoveredCells
   
   // * Game Start
@@ -28,11 +29,13 @@ function init() {
   createGrid(9, 9, 10)
 
   function startGame(event) {
-    gameLevel.classList.add('hidden')
     if (event.target.classList.contains('easy')) {
+      event.target.classList.add('neon')
       grid.classList.add('easyGame')
       startTimer()
     } else if (event.target.classList.contains('medium')) {
+      easy.classList.remove('neon')
+      event.target.classList.add('neon')
       grid.classList.add('mediumGame')
       for (let i = 0; i < (width * height); i++) {
         grid.removeChild(randomMines[i])
@@ -41,14 +44,10 @@ function init() {
       randomMines = []
       safeCells = []
       createGrid(16, 16, 40)
-      cells.forEach(cell => {
-        cell.addEventListener('click', clickCell)
-      })
-      cells.forEach(cell => {
-        cell.addEventListener('contextmenu', flagCell)
-      })
       startTimer()
     } else if (event.target.classList.contains('hard')) {
+      easy.classList.remove('neon')
+      event.target.classList.add('neon')
       grid.classList.add('hardGame')
       for (let i = 0; i < (width * height); i++) {
         grid.removeChild(randomMines[i])
@@ -57,19 +56,20 @@ function init() {
       randomMines = []
       safeCells = []
       createGrid(30, 16, 99)
-      cells.forEach(cell => {
-        cell.addEventListener('click', clickCell)
-      })
-      cells.forEach(cell => {
-        cell.addEventListener('contextmenu', flagCell)
-      })
       startTimer()
     }
+    cells.forEach(cell => {
+      cell.addEventListener('click', clickCell)
+    })
+    cells.forEach(cell => {
+      cell.addEventListener('contextmenu', flagCell)
+    })
   }
 
   // * Grid
   // create shuffled array
   function createGrid(width, height, mines) {
+    
     for (let i = 0; i < (width * height) - mines; i++) {
       const safe = document.createElement('div')
       safeCells.push(safe)
@@ -86,6 +86,7 @@ function init() {
       const mine = document.createElement('div')
       randomMines.push(mine)
       randomMines[i].classList.add('mine')
+      randomMines[i].classList.add('mine-clicked')
       if (grid.classList.contains('mediumGame')) {
         randomMines[i].classList.add('medium')
       }
@@ -271,8 +272,8 @@ function init() {
     } else if (event.target.classList.contains('safe') && event.target.value === 0) {
       event.target.classList.add('uncovered')
       testBlankCell = cells.indexOf(event.target)
-      audio.src = './assets/Woosh-Mark_DiAngelo-4778593.mp3'
-      audio.play()
+      // audio.src = './assets/Woosh-Mark_DiAngelo-4778593.mp3'
+      // audio.play()
       blankCell()
       uncoveredCells = 0
       cells.forEach(cell => {
@@ -315,12 +316,21 @@ function init() {
   }
 
   function flagCells() {
-    flag.classList.toggle('flagging')
+    flag.classList.toggle('neon')
   }
-    
+  
   // * Timer
   function startTimer() {
-    gameLevel.classList.add('hidden')
+    title.classList.add('neon')
+    setTimeout(() => {
+      title.classList.remove('neon')
+      audio.src = 'assets/Fizzle-SoundBible.com-1439537520.mp3'
+      audio.play()
+    }, 500)
+    setTimeout(() => {
+      title.classList.add('neon')
+    }, 800)
+    timer.classList.add('neon')  
     flag.classList.remove('hidden')
     timer.innerHTML = counter
     gameTimer = setInterval(() => {
@@ -328,6 +338,7 @@ function init() {
       timer.innerHTML = counter
       grid.removeEventListener('click', startTimer)
     }, 1000)
+  
   }
 
   // * Game Won
@@ -361,8 +372,9 @@ function init() {
 
     title.innerHTML = 'Game Over'
     reset.classList.remove('hidden')
+    reset.classList.add('neon')
     flag.classList.add('hidden')
-    title.classList.add('animate__heartBeat')
+    title.classList.add('animate__bounceIn')
     title.classList.add('game-over')
     clearInterval(gameTimer)
   }

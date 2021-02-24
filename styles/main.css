@@ -6,10 +6,34 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  color: #ffd8d8;
+  color: darkgray;
+  text-shadow: 
+  .1vw 0vw .25vw #000000, .2vw 0vw .25vw #000000, .4vw 0vw .25vw #000000, 
+  .1vw 0vw   0vw #747474, .2vw 0vw   0vw #747474, .4vw 0vw   0vw #747474;
   background-image: url('../assets/Brick-wall.jpg');
   background-position: center;
-  background-size: cover;
+  background-size: cover; 
+}
+
+.levels {
+  display: flex;
+  width: 450px;
+  justify-content: space-around;
+  align-self: center;
+  font-family: 'Caveat', cursive;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+h1 {
+  font-family: 'La Belle Aurore', cursive;
+  font-size: 80px;
+  margin: 0;
+  margin-bottom: -35px;
+}
+
+.neon {
+  color: #f89ddd;
   text-shadow: 
   .1vw 0vw .25vw #ffd8d8, .2vw 0vw .25vw #ffd8d8, .4vw 0vw .25vw #ffd8d8, 
   .1vw 0vw   0vw #f89ddd, .2vw 0vw   0vw #f89ddd, .4vw 0vw   0vw #f89ddd,
@@ -17,26 +41,7 @@ body {
   .1vw 0vw   2vw #fc54c9, .2vw 0vw   2vw #fc54c9, .4vw 0vw   2vw #fc54c9, 
   .1vw 0vw   1vw #ff31c1, .2vw 0vw   1vw #ff31c1, .4vw 0vw   5vw #ff31c1, 
   .1vw 0vw   5vw #ca018e, .2vw 0vw  20vw #ca018e, .4vw 0vw  10vw #ca018e,
-  .1vw 0vw  10vw #a30072, .2vw 0vw  30vw #a30072, .4vw 0vw  10vw #a30072; 
-}
-
-.levels {
-  display: flex;
-  width: 450px;
-  margin-top: 20px;
-  justify-content: space-around;
-  align-self: center;
-  font-family: 'Caveat', cursive;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-h1 {
-  font-family: 'La Belle Aurore', cursive;
-  color: #ffd8d8;
-  font-size: 80px;
-  margin: 0;
-  margin-bottom: -50px;
+  .1vw 0vw  10vw #a30072, .2vw 0vw  30vw #a30072, .4vw 0vw  10vw #a30072;
 }
 
 .top-row {
@@ -46,7 +51,6 @@ h1 {
   justify-content: space-between;
   align-items: center;
   font-family: 'Caveat', cursive;
-  padding: 10px;
   font-size: 40px;
   cursor: pointer;
 }
@@ -62,6 +66,7 @@ h1 {
   flex-wrap: wrap;
   border: 5px solid black;
   border-radius: 10px;
+  margin-top: 10px;
 }
 
 .grid.mediumGame {
@@ -103,19 +108,10 @@ div .flagged {
   border: none;
 }
 
-.flagging {
-  color: black;
-}
-
 div .mine-clicked {
   background-image: url("../assets/mine.webp");
   background-size: cover;
   background-position: center;
-}
-
-.game-over {
-  font-family: 'Caveat', cursive;
-  margin: 10px;
 }
 
 .hidden {
