@@ -240,6 +240,13 @@ function init() {
         })
       }
     }
+    if (key === 17) {
+      if (cells[keyCurrentPosition].classList.contains('uncovered')) {
+        return
+      } else {
+        cells[keyCurrentPosition].classList.toggle('flagged')
+      }
+    }
     removeKey(keyCurrentPosition)
     if (key === 39 && keyCurrentPosition % width !== width - 1) {
       keyCurrentPosition++
