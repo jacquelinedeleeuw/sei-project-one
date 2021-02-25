@@ -327,10 +327,20 @@ function init() {
     }
     const testBlankCells = [testBlankCell]
     const alreadyChecked = []
+
     while (testBlankCells.length > 0) {
+      let testLeft = true
+      let testLeftTop = true
+      let testTop = true
+      let testRightTop = true
+      let testRight = true
+      let testRightBottom = true
+      let testBottom = true
+      let testLeftBottom = true
       
       // check to the left
-      if (testBlankCell % width !== 0 && cells[testBlankCell - 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1)) {
+      if (testBlankCell % width !== 0 && cells[testBlankCell - 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1) && testLeft === true && !cells[testBlankCell - 1].classList.contains('flagged')) {
+        console.log('test')
         cells[testBlankCell - 1].classList.add('uncovered')
         if (cells[testBlankCell - 1].value > 0) {
           cells[testBlankCell - 1].innerHTML = cells[testBlankCell - 1].value
@@ -338,20 +348,24 @@ function init() {
           testBlankCells.push(testBlankCell - 1)
         }
         alreadyChecked.push(testBlankCell - 1)
+      } else {
+        testLeft = false
       }
-    
+
       // check top left
-      if (testBlankCell % width !== 0 && testBlankCell >= width && cells[testBlankCell - 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 - width)) {
+      if (testBlankCell % width !== 0 && testBlankCell >= width && cells[testBlankCell - 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 - width) && testLeftTop === true && !cells[testBlankCell - 1 - width].classList.contains('flagged')) {
         cells[testBlankCell - 1 - width].classList.add('uncovered')
         if (cells[testBlankCell - 1 - width].value > 0) {
           cells[testBlankCell - 1 - width].innerHTML = cells[testBlankCell - 1 - width].value
         } else {
           testBlankCells.push(testBlankCell - 1 - width)
         }
+      } else {
+        testLeftTop = false
       }
     
       // check top
-      if (testBlankCell >= width && cells[testBlankCell - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - width)) {
+      if (testBlankCell >= width && cells[testBlankCell - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - width) && testTop === true && !cells[testBlankCell - width].classList.contains('flagged')) {
         cells[testBlankCell - width].classList.add('uncovered')
         if (cells[testBlankCell - width].value > 0) {
           cells[testBlankCell - width].innerHTML = cells[testBlankCell - width].value
@@ -359,20 +373,24 @@ function init() {
           testBlankCells.push(testBlankCell - width)
         }
         alreadyChecked.push(testBlankCell - width)
+      } else {
+        testTop = false
       }
     
       // check top right
-      if (testBlankCell % width !== width - 1 && testBlankCell >= width && cells[testBlankCell + 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 - width)) {
+      if (testBlankCell % width !== width - 1 && testBlankCell >= width && cells[testBlankCell + 1 - width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 - width) && testRightTop === true && !cells[testBlankCell + 1 - width].classList.contains('flagged')) {
         cells[testBlankCell + 1 - width].classList.add('uncovered')
         if (cells[testBlankCell + 1 - width].value > 0) {
           cells[testBlankCell + 1 - width].innerHTML = cells[testBlankCell + 1 - width].value
         } else {
           testBlankCells.push(testBlankCell + 1 - width)
         }
+      } else {
+        testRightTop = false
       }
           
       // check to the right
-      if (testBlankCell % width !== width - 1 && cells[testBlankCell + 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1)) {
+      if (testBlankCell % width !== width - 1 && cells[testBlankCell + 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1) && testRight === true && !cells[testBlankCell + 1].classList.contains('flagged')) {
         cells[testBlankCell + 1].classList.add('uncovered')
         if (cells[testBlankCell + 1].value > 0) {
           cells[testBlankCell + 1].innerHTML = cells[testBlankCell + 1].value
@@ -380,20 +398,25 @@ function init() {
           testBlankCells.push(testBlankCell + 1)
         }
         alreadyChecked.push(testBlankCell + 1)
+      } else {
+        testRight = false
+
       }
     
       // check bottom right
-      if (testBlankCell % width !== width - 1 && testBlankCell < cellCount - width && cells[testBlankCell + 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 + width)) {
+      if (testBlankCell % width !== width - 1 && testBlankCell < cellCount - width && cells[testBlankCell + 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + 1 + width)  && testRightBottom === true && !cells[testBlankCell + 1 + width].classList.contains('flagged')) {
         cells[testBlankCell + 1 + width].classList.add('uncovered')
         if (cells[testBlankCell + 1 + width].value > 0) {
           cells[testBlankCell + 1 + width].innerHTML = cells[testBlankCell + 1 + width].value
         } else {
           testBlankCells.push(testBlankCell + 1 + width)
         }
+      } else {
+        testRightBottom = false
       }
     
       // check bottom
-      if (testBlankCell < cellCount - width && cells[testBlankCell + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + width)) {
+      if (testBlankCell < cellCount - width && cells[testBlankCell + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell + width) && testBottom === true && !cells[testBlankCell + width].classList.contains('flagged')) {
         cells[testBlankCell + width].classList.add('uncovered')
         if (cells[testBlankCell + width].value > 0) {
           cells[testBlankCell + width].innerHTML = cells[testBlankCell + width].value
@@ -401,16 +424,20 @@ function init() {
           testBlankCells.push(testBlankCell + width)
         }
         alreadyChecked.push(testBlankCell + width)
+      } else {
+        testBottom = false
       }
     
       // check bottom left
-      if (testBlankCell % width !== 0 && testBlankCell < cellCount - width && cells[testBlankCell - 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 + width)) {
+      if (testBlankCell % width !== 0 && testBlankCell < cellCount - width && cells[testBlankCell - 1 + width].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1 + width) && testLeftBottom === true && !cells[testBlankCell - 1 + width].classList.contains('flagged')) {
         cells[testBlankCell - 1 + width].classList.add('uncovered')
         if (cells[testBlankCell - 1 + width].value > 0) {
           cells[testBlankCell - 1 + width].innerHTML = cells[testBlankCell - 1 + width].value
         } else {
           testBlankCells.push(testBlankCell - 1 + width)
         }
+      } else {
+        testLeftBottom = false
       }
     
       testBlankCells.shift()
