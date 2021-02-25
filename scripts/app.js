@@ -20,6 +20,7 @@ function init() {
   const cells = []
   let randomMines = []
   const safeCells = []
+  const extraCells = []
   let testBlankCell
   let gameTimer = 0
   let counter = 0
@@ -27,6 +28,7 @@ function init() {
   const keyClass = 'key'
   const keyStartPosition = 0
   let keyCurrentPosition = 0
+  let firstCell = true
   
   // * Game Start
   // ? 1st click never a mine
@@ -131,7 +133,7 @@ function init() {
   // * Grid
   // create shuffled array
   function createGrid(width, height, mines) {
-    for (let i = 0; i < (width * height) - mines; i++) {
+    for (let i = 0; i < (width * height) - mines - 3; i++) {
       const safe = document.createElement('div')
       safeCells.push(safe)
       safeCells[i].classList.add('safe')
@@ -143,11 +145,17 @@ function init() {
         safeCells[i].classList.add('hard')
       }
     }
+    for (let i = 0; i < 3; i++) {
+      const safe = document.createElement('div')
+      extraCells.push(safe)
+      extraCells[i].classList.add('safe')
+      extraCells[i].value = 0
+    }
     for (let i = 0; i < mines; i++) {
       const mine = document.createElement('div')
       randomMines.push(mine)
       randomMines[i].classList.add('mine')
-      // randomMines[i].classList.add('mine-clicked')
+      randomMines[i].classList.add('mine-clicked')
       if (grid.classList.contains('mediumGame')) {
         randomMines[i].classList.add('medium')
       }
@@ -164,60 +172,14 @@ function init() {
       randomMines[i] = randomMines[j]
       randomMines[j] = temp
     }
+    randomMines = randomMines.concat(extraCells)
     
     // add shuffled array to grid
     for (let i = 0; i < (width * height); i++) {
       grid.appendChild(randomMines[i])
       cells.push(randomMines[i])
     }
-    // Number Logic based on mines
-    if (grid.classList.contains('mediumGame')) {
-      width = 16
-      height = 16
-      cellCount = width * height
-    } else if (grid.classList.contains('hardGame')) {
-      width = 16
-      height = 30
-      cellCount = width * height
-    }
-    for (let i = 0; i < cellCount; i++) {
-      const left = i - 1
-      const right = i + 1
-      const top = i - width
-      const bottom = i + width
-      const leftTop = i - 1 - width
-      const rightTop = i + 1 - width
-      const leftBottom = i - 1 + width
-      const rightBottom = i + 1 + width
-      if (cells[i].classList.contains('mine')) {
-        cells[i].value = 0
-      } else {
-        if (i % width !== width - 1 && cells[right].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== 0 && cells[left].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i >= width && cells[top].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i < cellCount - width && cells[bottom].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== 0 && i >= width && cells[leftTop].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== width - 1 && i >= width && cells[rightTop].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== 0 && i < cellCount - width && cells[leftBottom].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-        if (i % width !== width - 1 && i < cellCount - width && cells[rightBottom].classList.contains('mine')) {
-          cells[i].value += 1
-        }
-      }
-    }
+    numberLogic()
     addKey(keyStartPosition)
   }
 
@@ -241,6 +203,15 @@ function init() {
     }
     const key = event.keyCode
     if (key === 32) {
+      if (firstCell === true && cells[keyCurrentPosition].classList.contains('mine')) {
+        cells[keyCurrentPosition].classList.remove('mine')
+        cells[keyCurrentPosition].classList.remove('mine-clicked')
+        cells[keyCurrentPosition].classList.add('safe')
+        cells[cells.length - 1].classList.add('mine')
+        cells[cells.length - 1].classList.add('mine-clicked')
+        numberLogic()
+        firstCell = false
+      }
       if (cells[keyCurrentPosition].classList.contains('uncovered')) {
         return
       } else if (flag.classList.contains('flagging')) {
@@ -299,7 +270,56 @@ function init() {
     } 
     addKey(keyCurrentPosition)
   }
-
+  // Number Logic based on mines
+  function numberLogic() {
+    if (grid.classList.contains('mediumGame')) {
+      width = 16
+      height = 16
+      cellCount = width * height
+    } else if (grid.classList.contains('hardGame')) {
+      width = 16
+      height = 30
+      cellCount = width * height
+    }
+    for (let i = 0; i < cellCount; i++) {
+      const left = i - 1
+      const right = i + 1
+      const top = i - width
+      const bottom = i + width
+      const leftTop = i - 1 - width
+      const rightTop = i + 1 - width
+      const leftBottom = i - 1 + width
+      const rightBottom = i + 1 + width
+      if (cells[i].classList.contains('mine')) {
+        cells[i].value = 0
+      } else {
+        if (i % width !== width - 1 && cells[right].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && cells[left].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i >= width && cells[top].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i < cellCount - width && cells[bottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && i >= width && cells[leftTop].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== width - 1 && i >= width && cells[rightTop].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== 0 && i < cellCount - width && cells[leftBottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+        if (i % width !== width - 1 && i < cellCount - width && cells[rightBottom].classList.contains('mine')) {
+          cells[i].value += 1
+        }
+      }
+    }
+  }
   // * Blank cell logic
   function blankCell() {
     if (grid.classList.contains('mediumGame') || grid.classList.contains('hardGame')) {
@@ -400,6 +420,16 @@ function init() {
 
   // * Player clicks a cell
   function clickCell(event) {
+    if (firstCell === true && event.target.classList.contains('mine')) {
+      event.target.classList.remove('mine')
+      event.target.classList.remove('mine-clicked')
+      event.target.classList.add('safe')
+      cells[cells.length - 1].classList.add('mine')
+      cells[cells.length - 1].classList.add('mine-clicked')
+      numberLogic()
+      firstCell = false
+    }
+    firstCell = false
     if (event.target.classList.contains('uncovered')) {
       return
     } else if (flag.classList.contains('flagging')) {
