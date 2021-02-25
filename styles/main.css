@@ -6,10 +6,12 @@ body {
   justify-content: start;
   align-items: center;
   flex-direction: column;
-  color: darkgray;
+  font-family: 'Lato', sans-serif;
+  font-weight: bolder;
+  color: rgb(218, 218, 218);
   text-shadow: 
-  .1vw 0vw .25vw #000000, .2vw 0vw .25vw #000000, .4vw 0vw .25vw #000000, 
-  .1vw 0vw   0vw #747474, .2vw 0vw   0vw #747474, .4vw 0vw   0vw #747474;
+  .1vw 0vw .25vw #6d6d6d, .2vw 0vw .25vw #5c5c5c, .4vw 0vw .25vw #5c5c5c, 
+  .1vw 0vw   0vw #a1a1a1, .2vw 0vw   0vw #747474, .4vw 0vw   0vw #747474;
   background-image: url('../assets/brick-wall.jpg');
   background-position: center;
   background-size: cover; 
@@ -20,28 +22,15 @@ body {
   width: 450px;
   justify-content: space-between;
   align-self: center;
-  font-family: 'Caveat', cursive;
-  font-size: 40px;
+  font-size: 30px;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 h1 {
-  font-family: 'La Belle Aurore', cursive;
   font-size: 80px;
   margin-top: 50px;
-  margin-bottom: -35px;
-}
-
-.neon {
-  color: #f89ddd;
-  text-shadow: 
-  .1vw 0vw .25vw #ffd8d8, .2vw 0vw .25vw #ffd8d8, .4vw 0vw .25vw #ffd8d8, 
-  .1vw 0vw   0vw #f89ddd, .2vw 0vw   0vw #f89ddd, .4vw 0vw   0vw #f89ddd,
-  .1vw 0vw  .1vw #fd79d6, .2vw 0vw  .1vw #fd79d6, .4vw 0vw  .1vw #fd79d6,
-  .1vw 0vw   2vw #fc54c9, .2vw 0vw   2vw #fc54c9, .4vw 0vw   2vw #fc54c9, 
-  .1vw 0vw   1vw #ff31c1, .2vw 0vw   1vw #ff31c1, .4vw 0vw   5vw #ff31c1, 
-  .1vw 0vw   5vw #ca018e, .2vw 0vw  20vw #ca018e, .4vw 0vw  10vw #ca018e,
-  .1vw 0vw  10vw #a30072, .2vw 0vw  30vw #a30072, .4vw 0vw  10vw #a30072;
+  margin-bottom: 0px;
 }
 
 .top-row {
@@ -50,8 +39,16 @@ h1 {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Caveat', cursive;
-  font-size: 40px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.reset {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
   cursor: pointer;
 }
 
@@ -108,10 +105,9 @@ h1 {
 }
 
 .grid div {
-  font-family: 'Oxanium', cursive;
   font-weight: bolder;
   text-shadow: none;
-  color: #fc54c9;
+  color: #fde4fd;
   border: 1px solid black;
   width: 30px;
   height: 30px;
@@ -145,7 +141,7 @@ div .mine-clicked {
 }
 
 div.key {
-  border: 1px solid #a249a2;
+  border: 1px solid #fde4fd;
 }
 
 .hidden {

@@ -10,7 +10,6 @@ function init() {
   const medium = document.querySelector('.medium')
   const hard = document.querySelector('.hard')
   const audio = document.querySelector('audio')
-  const backgroundAudio = document.querySelector('.background')
 
   let width = 9
   let height = 9
@@ -52,8 +51,12 @@ function init() {
     gameLevels.forEach(level => {
       level.removeEventListener('mouseenter', chooseLevel)
     })
+    gameLevels.forEach(level => {
+      level.removeEventListener('click', startGame)
+    })
     if (event.target.classList.contains('easy')) {
       grid.classList.add('easyGame')
+      reset.classList.remove('hidden')
       startTimer()
       setTimeout(() => {
         createGrid(9, 9, 10)
@@ -63,6 +66,7 @@ function init() {
       }, 1500)
     } else if (event.target.classList.contains('medium')) {
       grid.classList.add('mediumGame')
+      reset.classList.remove('hidden')
       startTimer()
       setTimeout(() => {
         createGrid(16, 16, 40)
@@ -72,6 +76,7 @@ function init() {
       }, 1500)
     } else if (event.target.classList.contains('hard')) {
       grid.classList.add('hardGame')
+      reset.classList.remove('hidden')
       startTimer()
       setTimeout(() => {
         createGrid(30, 16, 99)
@@ -91,41 +96,36 @@ function init() {
     
     setTimeout(() => {
       setInterval(() => {
-        title.classList.remove('neon')
-        timer.classList.remove('neon') 
+        title.classList.remove('font-effect-neon')
+        timer.classList.remove('font-effect-neon') 
         if (grid.classList.contains('easyGame')) {
-          easy.classList.remove('neon')
+          easy.classList.remove('font-effect-neon')
         } else if (grid.classList.contains('mediumGame')) {
-          medium.classList.remove('neon')
+          medium.classList.remove('font-effect-neon')
         } else if (grid.classList.contains('hardGame')) {
-          hard.classList.remove('neon')
+          hard.classList.remove('font-effect-neon')
         }
         if (flag.classList.contains('flagging')) {
-          flag.classList.remove('neon')
+          flag.classList.remove('font-effect-neon')
         }
         audio.src = 'assets/random-fizzle.mp3'
         audio.play()
         setTimeout(() => {
-          title.classList.add('neon')
-          timer.classList.add('neon')
+          title.classList.add('font-effect-neon')
+          timer.classList.add('font-effect-neon')
           if (grid.classList.contains('easyGame')) {
-            easy.classList.add('neon')
+            easy.classList.add('font-effect-neon')
           } else if (grid.classList.contains('mediumGame')) {
-            medium.classList.add('neon')
+            medium.classList.add('font-effect-neon')
           } else if (grid.classList.contains('hardGame')) {
-            hard.classList.add('neon')
+            hard.classList.add('font-effect-neon')
           }
           if (flag.classList.contains('flagging')) {
-            flag.classList.add('neon')
+            flag.classList.add('font-effect-neon')
           }
         }, 200)
       }, Math.floor(Math.random() * (12000 - 5000) + 5000))
     }, 5000)
-    // setTimeout(() => {
-    //   backgroundAudio.src = 'assets/halogen-light.mp3'
-    //   backgroundAudio.loop = true
-    //   backgroundAudio.play()
-    // }, 1200)
   }
 
   // * Grid
@@ -340,7 +340,6 @@ function init() {
       
       // check to the left
       if (testBlankCell % width !== 0 && cells[testBlankCell - 1].classList.contains('safe') && !alreadyChecked.includes(testBlankCell - 1) && testLeft === true && !cells[testBlankCell - 1].classList.contains('flagged')) {
-        console.log('test')
         cells[testBlankCell - 1].classList.add('uncovered')
         if (cells[testBlankCell - 1].value > 0) {
           cells[testBlankCell - 1].innerHTML = cells[testBlankCell - 1].value
@@ -517,7 +516,7 @@ function init() {
   }
 
   function flagCells() {
-    flag.classList.toggle('neon')
+    flag.classList.toggle('font-effect-neon')
     flag.classList.toggle('flagging')
   }
   
@@ -525,35 +524,35 @@ function init() {
   function startTimer() {
     audio.src = 'assets/start-fizzle.mp3'
     audio.play()
-    title.classList.add('neon')
-    timer.classList.add('neon')
+    title.classList.add('font-effect-neon')
+    timer.classList.add('font-effect-neon')
     if (grid.classList.contains('easyGame')) {
-      easy.classList.add('neon')
+      easy.classList.add('font-effect-neon')
     } else if (grid.classList.contains('mediumGame')) {
-      medium.classList.add('neon')
+      medium.classList.add('font-effect-neon')
     } else if (grid.classList.contains('hardGame')) {
-      hard.classList.add('neon')
+      hard.classList.add('font-effect-neon')
     }
     setTimeout(() => {
-      title.classList.remove('neon')
-      timer.classList.remove('neon') 
+      title.classList.remove('font-effect-neon')
+      timer.classList.remove('font-effect-neon') 
       if (grid.classList.contains('easyGame')) {
-        easy.classList.remove('neon')
+        easy.classList.remove('font-effect-neon')
       } else if (grid.classList.contains('mediumGame')) {
-        medium.classList.remove('neon')
+        medium.classList.remove('font-effect-neon')
       } else if (grid.classList.contains('hardGame')) {
-        hard.classList.remove('neon')
+        hard.classList.remove('font-effect-neon')
       }
     }, 300)
     setTimeout(() => {
-      title.classList.add('neon')
-      timer.classList.add('neon')
+      title.classList.add('font-effect-neon')
+      timer.classList.add('font-effect-neon')
       if (grid.classList.contains('easyGame')) {
-        easy.classList.add('neon')
+        easy.classList.add('font-effect-neon')
       } else if (grid.classList.contains('mediumGame')) {
-        medium.classList.add('neon')
+        medium.classList.add('font-effect-neon')
       } else if (grid.classList.contains('hardGame')) {
-        hard.classList.add('neon')
+        hard.classList.add('font-effect-neon')
       }
     }, 500)
     flag.classList.remove('hidden')
@@ -562,9 +561,6 @@ function init() {
       gameTimer = setInterval(() => {
         counter++
         timer.innerHTML = counter
-        gameLevels.forEach(level => {
-          level.removeEventListener('click', startGame)
-        })
       }, 1000)
     }, 500)
   }
@@ -579,7 +575,7 @@ function init() {
     title.innerHTML = 'You won!'
     reset.classList.remove('hidden')
     flag.classList.add('hidden')
-    reset.classList.add('neon')
+    reset.classList.add('font-effect-neon')
     title.classList.add('animate__heartBeat')
     clearInterval(gameTimer)
   }
@@ -602,7 +598,7 @@ function init() {
 
     title.innerHTML = 'Game Over'
     reset.classList.remove('hidden')
-    reset.classList.add('neon')
+    reset.classList.add('font-effect-neon')
     flag.classList.add('hidden')
     title.classList.add('animate__bounceIn')
     title.classList.add('game-over')
