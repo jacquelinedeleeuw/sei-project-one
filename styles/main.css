@@ -8,11 +8,11 @@ body {
   flex-direction: column;
   font-family: 'Lato', sans-serif;
   font-weight: bolder;
-  color: rgb(218, 218, 218);
+  color: rgb(163, 163, 163);
   text-shadow: 
-  .1vw 0vw .25vw #6d6d6d, .2vw 0vw .25vw #5c5c5c, .4vw 0vw .25vw #5c5c5c, 
-  .1vw 0vw   0vw #a1a1a1, .2vw 0vw   0vw #747474, .4vw 0vw   0vw #747474;
-  background-image: url('../assets/brick-wall.jpg');
+  .1vw 0vw .25vw #4b4b4b, .2vw 0vw .25vw #4b4b4b, .4vw 0vw .25vw #4b4b4b, 
+  .1vw 0vw   0vw #2e2e2e, .2vw 0vw   0vw #2e2e2e, .4vw 0vw   0vw #2e2e2e;
+  background-image: url('../assets/black-brick-wall.jpg');
   background-position: center;
   background-size: cover; 
 }
@@ -27,13 +27,13 @@ body {
   margin-bottom: 10px;
 }
 
-h1 {
+h1, h2 {
   font-size: 80px;
   margin-top: 50px;
   margin-bottom: 0px;
 }
 
-.top-row {
+.top-row, .leaderboard {
   width: 450px;
   display: flex;
   flex-direction: row;
@@ -43,13 +43,12 @@ h1 {
   cursor: pointer;
 }
 
-.reset {
-  margin-top: 15px;
-  display: flex;
+.leaderboard {
   justify-content: center;
-  align-items: center;
-  font-size: 30px;
-  cursor: pointer;
+  margin-top: 10px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
 }
 
 .timer {
@@ -64,6 +63,10 @@ h1 {
   border: 5px solid black;
   border-radius: 10px;
   margin-top: 60px;
+}
+
+.leaderboard {
+
 }
 
 .start {

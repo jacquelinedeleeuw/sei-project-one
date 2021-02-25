@@ -10,6 +10,7 @@ function init() {
   const medium = document.querySelector('.medium')
   const hard = document.querySelector('.hard')
   const audio = document.querySelector('audio')
+  const leaderboard = document.querySelector('.leaderboard')
 
   let width = 9
   let height = 9
@@ -29,8 +30,6 @@ function init() {
   let firstCell = true
   
   // * Game Start
-  // ? ScoreBoard
-
   function chooseLevel(event) {
     if (event.target.classList.contains('easy')) {
       grid.classList.remove('startMedium')
@@ -578,7 +577,35 @@ function init() {
     reset.classList.add('font-effect-neon')
     title.classList.add('animate__heartBeat')
     clearInterval(gameTimer)
+    setTimeout(() => {
+      // * ScoreBoard
+      let name = window.prompt('Enter your name for the leaderboard', '')
+      const value = counter
+      grid.classList.add('hidden')
+      timer.classList.add('hidden')
+      gameLevels.forEach(level => {
+        level.classList.add('hidden')
+      })
+      leaderboard.classList.remove('hidden')
+      title.innerHTML = 'Leaderboard'
+      if (name) {
+        if (grid.classList.contains('easyGame')) {
+          name = 'Easy -> ' + name
+        } else if (grid.classList.contains('mediumGame')) {
+          name = 'Medium -> ' + name
+        } if (grid.classList.contains('hardGame')) {
+          name = 'Hard -> ' + name
+        }
+        localStorage.setItem(name, value)
+      }
+      for (let i = 0; i < localStorage.length; i++) {
+        const name = localStorage.key(i)
+        const score = localStorage.getItem(name)
+        leaderboard.innerHTML += name + ' in ' + score + ' seconds' + '<br/>'
+      }
+    }, 1000)
   }
+      
   // * Game Over
   function gameOver() {
     audio.src = 'assets/explosion.mp3'
@@ -595,7 +622,6 @@ function init() {
         }
       })
     })
-
     title.innerHTML = 'Game Over'
     reset.classList.remove('hidden')
     reset.classList.add('font-effect-neon')
@@ -603,12 +629,27 @@ function init() {
     title.classList.add('animate__bounceIn')
     title.classList.add('game-over')
     clearInterval(gameTimer)
+    setTimeout(() => {
+      grid.classList.add('hidden')
+      timer.classList.add('hidden')
+      gameLevels.forEach(level => {
+        level.classList.add('hidden')
+      })
+      leaderboard.classList.remove('hidden')
+      title.innerHTML = 'Leaderboard'
+      for (let i = 0; i < localStorage.length; i++) {
+        const name = localStorage.key(i)
+        const score = localStorage.getItem(name)
+        leaderboard.innerHTML += name + ' in ' + score + ' seconds' + '<br/>'
+      }
+    }, 3000)
   }
 
   // * Reset Game
   function resetGame() {
     window.location.reload()
   }
+
 
   // * Event Listeners
   cells.forEach(cell => {
