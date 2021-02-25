@@ -6,7 +6,6 @@ function init() {
   const reset = document.querySelector('.reset')
   const flag = document.querySelector('.flag')
   const timer = document.querySelector('.timer')
-  const gameLevel = document.querySelector('.levels')
   const easy = document.querySelector('.easy')
   const medium = document.querySelector('.medium')
   const hard = document.querySelector('.hard')
@@ -31,7 +30,6 @@ function init() {
   let firstCell = true
   
   // * Game Start
-  // ? 1st click never a mine
   // ? ScoreBoard
 
   function chooseLevel(event) {
@@ -124,7 +122,7 @@ function init() {
       }, Math.floor(Math.random() * (12000 - 5000) + 5000))
     }, 5000)
     // setTimeout(() => {
-    //   backgroundAudio.src = 'assets/Halogen Light-SoundBible.com-1664817471.mp3'
+    //   backgroundAudio.src = 'assets/halogen-light.mp3'
     //   backgroundAudio.loop = true
     //   backgroundAudio.play()
     // }, 1200)
@@ -155,7 +153,6 @@ function init() {
       const mine = document.createElement('div')
       randomMines.push(mine)
       randomMines[i].classList.add('mine')
-      randomMines[i].classList.add('mine-clicked')
       if (grid.classList.contains('mediumGame')) {
         randomMines[i].classList.add('medium')
       }
@@ -208,7 +205,10 @@ function init() {
         cells[keyCurrentPosition].classList.remove('mine-clicked')
         cells[keyCurrentPosition].classList.add('safe')
         cells[cells.length - 1].classList.add('mine')
-        cells[cells.length - 1].classList.add('mine-clicked')
+        cells[cells.length - 1].classList.remove('safe')
+        cells.forEach(cell => {
+          cell.value = 0
+        })
         numberLogic()
         firstCell = false
       }
@@ -225,7 +225,7 @@ function init() {
       } else if (cells[keyCurrentPosition].classList.contains('safe') && cells[keyCurrentPosition].value === 0) {
         cells[keyCurrentPosition].classList.add('uncovered')
         testBlankCell = keyCurrentPosition
-        audio.src = './assets/Woosh-Mark_DiAngelo-4778593.mp3'
+        audio.src = 'assets/woosh.mp3'
         audio.play()
         blankCell()
         uncoveredCells = 0
@@ -452,7 +452,10 @@ function init() {
       event.target.classList.remove('mine-clicked')
       event.target.classList.add('safe')
       cells[cells.length - 1].classList.add('mine')
-      cells[cells.length - 1].classList.add('mine-clicked')
+      cells[cells.length - 1].classList.remove('safe')
+      cells.forEach(cell => {
+        cell.value = 0
+      })
       numberLogic()
       firstCell = false
     }
@@ -470,7 +473,7 @@ function init() {
     } else if (event.target.classList.contains('safe') && event.target.value === 0) {
       event.target.classList.add('uncovered')
       testBlankCell = cells.indexOf(event.target)
-      audio.src = './assets/Woosh-Mark_DiAngelo-4778593.mp3'
+      audio.src = 'assets/woosh.mp3'
       audio.play()
       blankCell()
       uncoveredCells = 0
@@ -564,7 +567,6 @@ function init() {
         })
       }, 1000)
     }, 500)
-
   }
 
   // * Game Won
@@ -583,7 +585,7 @@ function init() {
   }
   // * Game Over
   function gameOver() {
-    audio.src = 'assets/Smashing-Yuri_Santana-1233262689.mp3'
+    audio.src = 'assets/explosion.mp3'
     audio.play()
     cells.forEach(cell => {
       cell.classList.remove('flagged')
