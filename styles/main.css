@@ -16,13 +16,11 @@ body {
 }
 
 h1 {
-  font-family: 'Clip', sans-serif;
   font-size: 85px;
-  margin-bottom: 25px;
+  margin-bottom: 35px;
 }
 
 h2 {
-  font-family: 'Clip', sans-serif;
   font-size: 35px;
   margin: 0 0 40px 0;
 }
@@ -97,13 +95,13 @@ span {
   margin: 0;
 }
 .grid.mediumGame {
-  margin: 0;
+  margin: 0 0 20px;
   width: 512px;
   height: 512px;
 }
 
 .grid.hardGame {
-  margin: 0;
+  margin: 0 0 20px;
   width: 512px;
   height: 960px;
 }
@@ -140,7 +138,12 @@ div .flagged {
   background-size: contain;
 }
 
+
 div .mine-clicked {
+  background-image: url("../assets/mine2.png");
+}
+
+div .mine-explode{
   background-image: url("../assets/mine.webp");
 }
 
@@ -164,4 +167,30 @@ div .mine-clicked {
 
 .hidden {
   display: none;
+}
+
+@media screen and (max-width: 800px) {
+  body {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: 65px;
+  }
+  .top-row {
+    margin-left: 30px;
+    width: 70vw;
+  }
+  h2, .levels {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .levels {
+    width: 400px;
+  }
+  .timer-flag-reset, .reset {
+    margin: 5px 20px;
+    font-size: 20px;
+    width: 30px;
+  }
 }

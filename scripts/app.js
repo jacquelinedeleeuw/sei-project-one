@@ -27,7 +27,6 @@ function init() {
   let counter = 0
   let uncoveredCells
   const keyClass = 'key'
-  const keyStartPosition = 0
   let keyCurrentPosition = 0
   let firstCell = true
   
@@ -116,7 +115,7 @@ function init() {
         if (reset.classList.contains('font-effect-neon')) {
           reset.classList.remove('font-effect-neon')
         }
-        audio.src = 'assets/random-fizzle.mp3'
+        audio.src = '../assets/random-fizzle.mp3'
         audio.play()
         setTimeout(() => {
           title.classList.add('font-effect-neon')
@@ -191,7 +190,6 @@ function init() {
       cells.push(randomMines[i])
     }
     numberLogic()
-    addKey(keyStartPosition)
   }
 
   function addKey(position) {
@@ -203,6 +201,7 @@ function init() {
   }
 
   function handleKey(event) {
+    addKey(keyCurrentPosition)
     if (grid.classList.contains('mediumGame')) {
       width = 16
       height = 16
@@ -239,7 +238,7 @@ function init() {
       } else if (cells[keyCurrentPosition].classList.contains('safe') && cells[keyCurrentPosition].value === 0) {
         cells[keyCurrentPosition].classList.add('uncovered')
         testBlankCell = keyCurrentPosition
-        audio.src = 'assets/woosh.mp3'
+        audio.src = '../assets/woosh.mp3'
         audio.play()
         blankCell()
         uncoveredCells = 0
@@ -486,7 +485,7 @@ function init() {
     } else if (event.target.classList.contains('safe') && event.target.value === 0) {
       event.target.classList.add('uncovered')
       testBlankCell = cells.indexOf(event.target)
-      audio.src = 'assets/woosh.mp3'
+      audio.src = '../assets/woosh.mp3'
       audio.play()
       blankCell()
       uncoveredCells = 0
@@ -531,9 +530,9 @@ function init() {
 
   function flagCells(event) {
     if (event.target.classList.contains('flagging')) {
-      audio.src = 'assets/button-off.mp3'
+      audio.src = '../assets/button-off.mp3'
     } else {
-      audio.src = 'assets/click.mp3'
+      audio.src = '../assets/click.mp3'
     }
     audio.play()
     flag.classList.toggle('font-effect-neon')
@@ -541,12 +540,12 @@ function init() {
   }
   // * Timer
   function startTimer() {
-    audio.src = 'assets/click.mp3'
+    audio.src = '../assets/click.mp3'
     audio.play()
     setTimeout(() => {
-      audio.src = 'assets/start-fizzle.mp3'
+      audio.src = '../assets/start-fizzle.mp3'
       audio.play()
-    }, 400);
+    }, 400)
     title.classList.add('font-effect-neon')
     timer.classList.add('font-effect-neon')
     if (grid.classList.contains('easyGame')) {
@@ -599,6 +598,7 @@ function init() {
     flag.classList.add('hidden')
     reset.classList.add('font-effect-neon')
     title.classList.add('animate__heartBeat')
+    pickLevel.classList.add('hidden')
     clearInterval(gameTimer)
     setTimeout(() => {
       // * ScoreBoard
@@ -631,24 +631,18 @@ function init() {
       
   // * Game Over
   function gameOver() {
-    audio.src = 'assets/explosion.mp3'
+    audio.src = '../assets/explosion.mp3'
     audio.play()
-    cells.forEach(cell => {
-      cell.classList.remove('flagged')
-      cell.classList.add('uncovered')
-      if (cell.value > 0) {
-        cell.innerHTML = cell.value
+    cells.forEach(mine => {
+      if (mine.classList.contains('mine')) {
+        mine.classList.add('mine-clicked')
+        mine.classList.add('uncovered')
       }
-      cells.forEach(mine => {
-        if (mine.classList.contains('mine')) {
-          mine.classList.add('mine-clicked')
-        }
-      })
     })
+    event.target.classList.add('mine-explode')
     title.innerHTML = 'Game Over'
     reset.classList.add('font-effect-neon')
     flag.classList.add('hidden')
-    title.classList.add('animate__bounceIn')
     title.classList.add('game-over')
     clearInterval(gameTimer)
   }
@@ -656,7 +650,7 @@ function init() {
   // * Reset Game
   function resetGame() {
     reset.classList.add('font-effect-neon')
-    audio.src = 'assets/button-off.mp3'
+    audio.src = '../assets/button-off.mp3'
     audio.play()
     setTimeout(() => {
       window.location.reload()
