@@ -12,6 +12,7 @@ function init() {
   const hard = document.querySelector('.hard')
   const audio = document.querySelector('audio')
   const leaderboard = document.querySelector('.leaderboard')
+  const pickLevel = document.querySelector('.pick-level')
 
   let width = 9
   let height = 9
@@ -48,6 +49,7 @@ function init() {
   }
 
   function startGame(event) {
+    pickLevel.classList.remove('font-effect-neon')
     gameLevels.forEach(level => {
       level.removeEventListener('mouseenter', chooseLevel)
     })
@@ -527,15 +529,24 @@ function init() {
     }
   }
 
-  function flagCells() {
+  function flagCells(event) {
+    if (event.target.classList.contains('flagging')) {
+      audio.src = 'assets/button-off.mp3'
+    } else {
+      audio.src = 'assets/click.mp3'
+    }
+    audio.play()
     flag.classList.toggle('font-effect-neon')
     flag.classList.toggle('flagging')
   }
-  
   // * Timer
   function startTimer() {
-    audio.src = 'assets/start-fizzle.mp3'
+    audio.src = 'assets/click.mp3'
     audio.play()
+    setTimeout(() => {
+      audio.src = 'assets/start-fizzle.mp3'
+      audio.play()
+    }, 400);
     title.classList.add('font-effect-neon')
     timer.classList.add('font-effect-neon')
     if (grid.classList.contains('easyGame')) {
@@ -636,7 +647,6 @@ function init() {
     })
     title.innerHTML = 'Game Over'
     reset.classList.add('font-effect-neon')
-    reset.classList.add('font-effect-neon')
     flag.classList.add('hidden')
     title.classList.add('animate__bounceIn')
     title.classList.add('game-over')
@@ -645,7 +655,12 @@ function init() {
 
   // * Reset Game
   function resetGame() {
-    window.location.reload()
+    reset.classList.add('font-effect-neon')
+    audio.src = 'assets/button-off.mp3'
+    audio.play()
+    setTimeout(() => {
+      window.location.reload()
+    }, 300)
   }
 
 

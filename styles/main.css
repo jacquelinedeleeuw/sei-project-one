@@ -4,7 +4,7 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Clip', sans-serif;
   font-weight: bolder;
   color: rgb(163, 163, 163);
   text-shadow: 
@@ -16,15 +16,31 @@ body {
 }
 
 h1 {
+  font-family: 'Clip', sans-serif;
   font-size: 85px;
   margin-bottom: 25px;
+}
+
+h2 {
+  font-family: 'Clip', sans-serif;
+  font-size: 35px;
+  margin: 0 0 40px 0;
+}
+
+.top-row {
+  display: flex;
+}
+
+span {
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 40px;
 }
 
 .levels {
   display: flex;
   width: 550px;
   justify-content: space-around;
-  font-size: 30px;
+  font-size: 35px;
   cursor: pointer;
   margin-bottom: 40px;
 }
@@ -35,7 +51,7 @@ h1 {
 
 .timer-flag-reset, .reset {
   margin: 5px 20px;
-  font-size: 25px;
+  font-size: 35px;
   width: 70px;
   cursor: pointer;
 }
@@ -94,6 +110,7 @@ h1 {
 
 .grid div {
   text-shadow: none;
+  font-family: 'Lato', sans-serif;
   color: #fde4fd;
   border: 1px solid black;
   width: 30px;
