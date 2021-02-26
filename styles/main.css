@@ -1,9 +1,7 @@
 body {
   height: 100vh;
-  width: 100vw;
   margin: 0;
   display: flex;
-  justify-content: start;
   align-items: center;
   flex-direction: column;
   font-family: 'Lato', sans-serif;
@@ -17,42 +15,34 @@ body {
   background-size: cover; 
 }
 
+h1 {
+  font-size: 85px;
+  margin-bottom: 25px;
+}
+
 .levels {
   display: flex;
-  width: 450px;
-  justify-content: space-between;
-  align-self: center;
+  width: 550px;
+  justify-content: space-around;
   font-size: 30px;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 
-h1, h2 {
-  font-size: 80px;
-  margin-top: 50px;
-  margin-bottom: 0px;
-}
-
-.top-row, .leaderboard {
-  width: 450px;
+.main {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 30px;
-  cursor: pointer;
 }
 
-.leaderboard {
-  justify-content: center;
-  margin-top: 10px;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 10px;
+.timer-flag-reset, .reset {
+  margin: 5px 20px;
+  font-size: 25px;
+  width: 70px;
+  cursor: pointer;
 }
 
 .timer {
   cursor: default;
+  margin-bottom: 10px;
 }
 
 .grid {
@@ -62,11 +52,7 @@ h1, h2 {
   flex-wrap: wrap;
   border: 5px solid black;
   border-radius: 10px;
-  margin-top: 60px;
-}
-
-.leaderboard {
-
+  margin-right: 110px
 }
 
 .start {
@@ -92,23 +78,21 @@ h1, h2 {
 }
 
 .grid.easyGame {
-  margin-top: 10px;
+  margin: 0;
 }
-
 .grid.mediumGame {
-  margin-top: 10px;
+  margin: 0;
   width: 512px;
   height: 512px;
 }
 
 .grid.hardGame {
-  margin-top: 10px;
+  margin: 0;
   width: 512px;
   height: 960px;
 }
 
 .grid div {
-  font-weight: bolder;
   text-shadow: none;
   color: #fde4fd;
   border: 1px solid black;
@@ -121,10 +105,13 @@ h1, h2 {
   cursor: pointer;
 }
 
+div.key {
+  border: 1px solid #fde4fd;
+}
+
 div.safe.uncovered {
   background-image: none;
   background-color: black;
-  text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,17 +121,28 @@ div.safe.uncovered {
 div .flagged {
   background-image: url('../assets/flag.webp');
   background-size: contain;
-  background-position: center;
 }
 
 div .mine-clicked {
   background-image: url("../assets/mine.webp");
-  background-size: cover;
-  background-position: center;
 }
 
-div.key {
-  border: 1px solid #fde4fd;
+.leaderboard {
+  width: 450px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.leaderboard {
+  justify-content: center;
+  margin-top: 10px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
 }
 
 .hidden {

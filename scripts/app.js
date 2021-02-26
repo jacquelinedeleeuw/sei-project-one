@@ -1,5 +1,6 @@
 function init() {
 
+  // * Variables
   const gameLevels = document.querySelectorAll('.level')
   const grid = document.querySelector('.grid')
   const title = document.querySelector('h1')
@@ -107,6 +108,12 @@ function init() {
         if (flag.classList.contains('flagging')) {
           flag.classList.remove('font-effect-neon')
         }
+        if (!leaderboard.classList.contains('hidden')) {
+          leaderboard.classList.remove('font-effect-neon')
+        }
+        if (reset.classList.contains('font-effect-neon')) {
+          reset.classList.remove('font-effect-neon')
+        }
         audio.src = 'assets/random-fizzle.mp3'
         audio.play()
         setTimeout(() => {
@@ -121,6 +128,12 @@ function init() {
           }
           if (flag.classList.contains('flagging')) {
             flag.classList.add('font-effect-neon')
+          }
+          if (!leaderboard.classList.contains('hidden')) {
+            leaderboard.classList.add('font-effect-neon')
+          }
+          if (title.innerHTML === 'Game Over' || title.innerHTML === 'Game Won' || title.innerHTML === 'Leaderboard') {
+            reset.classList.add('font-effect-neon')
           }
         }, 200)
       }, Math.floor(Math.random() * (12000 - 5000) + 5000))
@@ -572,14 +585,13 @@ function init() {
       }
     })
     title.innerHTML = 'You won!'
-    reset.classList.remove('hidden')
     flag.classList.add('hidden')
     reset.classList.add('font-effect-neon')
     title.classList.add('animate__heartBeat')
     clearInterval(gameTimer)
     setTimeout(() => {
       // * ScoreBoard
-      let name = window.prompt('Enter your name for the leaderboard', '')
+      let name = window.prompt('You won! Enter your name for the leaderboard', '')
       const value = counter
       grid.classList.add('hidden')
       timer.classList.add('hidden')
@@ -590,11 +602,11 @@ function init() {
       title.innerHTML = 'Leaderboard'
       if (name) {
         if (grid.classList.contains('easyGame')) {
-          name = 'Easy -> ' + name
+          name = 'Easy - ' + name
         } else if (grid.classList.contains('mediumGame')) {
-          name = 'Medium -> ' + name
+          name = 'Medium - ' + name
         } if (grid.classList.contains('hardGame')) {
-          name = 'Hard -> ' + name
+          name = 'Hard - ' + name
         }
         localStorage.setItem(name, value)
       }
@@ -603,7 +615,7 @@ function init() {
         const score = localStorage.getItem(name)
         leaderboard.innerHTML += name + ' in ' + score + ' seconds' + '<br/>'
       }
-    }, 1000)
+    }, 2500)
   }
       
   // * Game Over
@@ -623,26 +635,12 @@ function init() {
       })
     })
     title.innerHTML = 'Game Over'
-    reset.classList.remove('hidden')
+    reset.classList.add('font-effect-neon')
     reset.classList.add('font-effect-neon')
     flag.classList.add('hidden')
     title.classList.add('animate__bounceIn')
     title.classList.add('game-over')
     clearInterval(gameTimer)
-    setTimeout(() => {
-      grid.classList.add('hidden')
-      timer.classList.add('hidden')
-      gameLevels.forEach(level => {
-        level.classList.add('hidden')
-      })
-      leaderboard.classList.remove('hidden')
-      title.innerHTML = 'Leaderboard'
-      for (let i = 0; i < localStorage.length; i++) {
-        const name = localStorage.key(i)
-        const score = localStorage.getItem(name)
-        leaderboard.innerHTML += name + ' in ' + score + ' seconds' + '<br/>'
-      }
-    }, 3000)
   }
 
   // * Reset Game
