@@ -1,5 +1,5 @@
 body {
-  height: 100vh;
+  height: 100%;
   margin: 0;
   display: flex;
   align-items: center;
@@ -173,17 +173,15 @@ div .mine-explode{
 @media screen and (max-width: 800px) {
   body {
     width: 100%;
-    margin-bottom: 20px;
   }
   h1 {
-    font-size: 65px;
+    font-size: 40px;
   }
   .top-row {
-    margin-left: 30px;
     width: 70vw;
   }
   h2, .levels {
-    font-size: 20px;
+    font-size: 15px;
     margin-bottom: 20px;
   }
   .levels {
@@ -191,7 +189,13 @@ div .mine-explode{
   }
   .timer-flag-reset, .reset {
     margin: 5px 20px;
-    font-size: 20px;
+    font-size: 15px;
     width: 30px;
+  }
+  .grid {
+    margin: 0 8px;
+  }
+  .main {
+    flex-direction: column;
   }
 }
