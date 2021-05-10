@@ -12,7 +12,7 @@ This was my first project for the Software Engineering Immersive course. It is a
 ### Play deployed version
 https://jacquelinedeleeuw.github.io/sei-project-one/
 
-![](minesweeper.gif)
+![](assets/minesweeper.gif)
 
 ### Project Brief
 - The game should be playable for one player, playing against the computer
@@ -101,7 +101,7 @@ function numberLogic() {
    }
  }
 ```
-![](minesweeper.png)
+![](assets/minesweeper.png)
 
 When a player clicks a blank cell, all surrounding blank cells should open up automatically until they reach a number. In order to implement this I had to create a loop to check all surrounding cells, open them up including the first number that surrounds the clicked cell at which point the loop for that side would finish. This was one of the biggest challenges for me and something I got stuck on for quite a while. After thorough testing and 
 
@@ -123,7 +123,7 @@ After the game was at MVP, I created a medium and hard level. By using the width
 
 A feature I really wanted to include was that the first click would never be a mine. After trying many other options I accomplished this by adding 3 safe cells at the end of the array after the cells were shuffled. If the player would click on a mine on the first click, it would trigger a function to switch the mine with one of the last 3 cells making sure it would always be a safe cell.
 
-![](gameover.png)
+![](assets/gameover.png)
 
 When playing some different versions of minesweeper to check if I had missed any features, I found that some newer versions of minesweeper also provide the option to navigate with the arrows on the keyboard and control/space to flag/reveal cells. I included this as a (hidden) feature on the game where the border around the cell that is selected only appears after the arrows are used so the design of the board is not disturbed when the player chooses to use their mouse instead.
 
